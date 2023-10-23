@@ -1,7 +1,12 @@
 defmodule TimemanagerWeb.UserController do
   use TimemanagerWeb, :controller
+  alias Timemanager.Users
+  alias Timemanager.Repo
 
   def index(conn, _params) do
-    send_resp(conn, 201, "Hello Jason")
+    users = Repo.all(Users)
+
+    render(conn, "index.json", users: users)
   end
 end
+
