@@ -4,8 +4,8 @@ import Config
 config :timemanager, Timemanager.Repo,
   username: "postgres",
   password: "postgres",
-  hostname: "localhost",
-  database: "timemanager_dev",
+  hostname: "db",
+  database: "timemanager",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
