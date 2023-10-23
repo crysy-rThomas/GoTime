@@ -20,4 +20,5 @@ else
   echo "Database $PGDATABASE already exists. Skipping creation."
 fi
 
+mix ecto.migrate
 exec mix phx.server

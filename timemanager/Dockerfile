@@ -18,6 +18,7 @@ RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && apt-get install -
 WORKDIR /timemanager
 
 RUN mix deps.get
+
 RUN npm install --prefix ./assets
 
 EXPOSE 4000
