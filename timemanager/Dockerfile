@@ -16,7 +16,7 @@ RUN mix local.hex --force && \
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && apt-get install -y nodejs
 
 WORKDIR /timemanager
-RUN mix setup
+
 RUN mix deps.get
 RUN npm install --prefix ./assets
 
