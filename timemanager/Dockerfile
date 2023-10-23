@@ -5,7 +5,7 @@ RUN apt-get update && \
     apt-get install --yes build-essential inotify-tools postgresql-client git && \
     apt-get clean
 
-ADD . /app
+ADD . /timemanager
 
 # Install Phoenix packages
 RUN mix local.hex --force && \
@@ -15,11 +15,12 @@ RUN mix local.hex --force && \
 # Install node
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && apt-get install -y nodejs
 
-WORKDIR /app
+WORKDIR /timemanager
 
 RUN mix deps.get
 RUN npm install --prefix ./assets
 
 EXPOSE 4000
 
+RUN ["chmod", "+x", "/timemanager/entrypoint.sh"]
 CMD ["/timemanager/entrypoint.sh"]
