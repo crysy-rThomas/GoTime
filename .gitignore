@@ -1,2 +1,3 @@
 *.pdf
 postgres-data
+pgdata
