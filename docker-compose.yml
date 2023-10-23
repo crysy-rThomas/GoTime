@@ -9,7 +9,7 @@ services:
     depends_on:
       - db
     env_file:
-      - timemanager.env
+      - ./timemanager.env
 
   db:
     image: postgres:latest
