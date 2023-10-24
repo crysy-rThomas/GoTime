@@ -18,15 +18,10 @@ defmodule TimemanagerWeb.UserJSON do
   defp data(%User{} = user) do
     %{
       id: user.id,
-<<<<<<< HEAD
-      first_name: user.first_name,
-      last_name: user.last_name
-=======
       firstname: user.firstname,
       lastname: user.lastname,
       email: user.email,
       password: user.password
->>>>>>> 59688609fb43e4d8fbc507e69fe6932cef6a2633
     }
   end
 end
