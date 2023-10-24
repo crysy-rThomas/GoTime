@@ -3,8 +3,8 @@ defmodule Timemanager.Users.User do
   import Ecto.Changeset
 
   schema "users" do
-    field :first_name, :string
-    field :last_name, :string
+    field :firstname, :string
+    field :lastname, :string
     field :email, :string
     field :password, :string
     field :role, :integer
@@ -15,7 +15,7 @@ defmodule Timemanager.Users.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:first_name, :last_name])
-    |> validate_required([:first_name, :last_name])
+    |> cast(attrs, [:firstname, :lastname])
+    |> validate_required([:firstname, :lastname])
   end
 end
