@@ -1,6 +1,6 @@
 version: '3.8'
 services:
-  web:
+  back:
     build: ./timemanager
     ports:
       - "4000:4000"
@@ -10,7 +10,15 @@ services:
       - db
     env_file:
       - ./timemanager.env
-
+  front:
+    build: ./front/timemaneger
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./front/timemaneger:/front/timemaneger
+    depends_on:
+      - db
+      - back
   db:
     image: postgres:latest
     environment:
@@ -30,12 +38,3 @@ services:
       PGADMIN_DEFAULT_PASSWORD: root
     ports:
       - "5050:80"
-
-  adminer:
-      image: adminer
-      container_name: adminer
-      restart: always
-      depends_on:
-          - db
-      ports:
-          - 8080:8080
