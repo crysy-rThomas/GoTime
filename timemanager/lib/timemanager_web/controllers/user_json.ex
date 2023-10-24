@@ -15,13 +15,22 @@ defmodule TimemanagerWeb.UserJSON do
     %{data: data(user)}
   end
 
+  def login(%{token: token}) do
+    %{data: %{token: token}}
+  end
+
+  def error(%{error: error}) do
+    %{data: %{error: error}}
+  end
+
   defp data(%User{} = user) do
     %{
       id: user.id,
       firstname: user.firstname,
       lastname: user.lastname,
       email: user.email,
-      password: user.password
+      password: user.password,
+      role: user.role
     }
   end
 end
