@@ -20,14 +20,7 @@ config :timemanager, TimemanagerWeb.Endpoint,
     layout: false
   ],
   pubsub_server: Timemanager.PubSub,
-  live_view: [signing_salt: "FQg5PVHz"],
-  swagger: [
-    info: %{
-      version: "0.1.0",
-      title: "Time Manager API",
-      description: "API for the Time Manager application"
-    }
-  ]
+  live_view: [signing_salt: "FQg5PVHz"]
 
 # Configures the mailer
 #
