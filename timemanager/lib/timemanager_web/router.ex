@@ -17,7 +17,7 @@ defmodule TimemanagerWeb.Router do
   scope "/api", TimemanagerWeb do
     pipe_through(:api)
     resources("/users", UserController, except: [:new, :edit])
-    resources("/roles", RolesController, except: [:new, :edit])
-    resources("/clocks", ClocksController)
+    resources("/roles", RoleController, except: [:new, :edit])
+    resources("/clocks", ClockController)
   end
 end
