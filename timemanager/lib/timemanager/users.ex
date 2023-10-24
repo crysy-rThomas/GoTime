@@ -35,7 +35,14 @@ defmodule Timemanager.Users do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user(id) do
+    re = Repo.get(User, id)
+    if (re != nil) do
+      {:ok, re}
+    else
+      {:error, re}
+    end
+  end
 
   @doc """
   Creates a user.
@@ -100,5 +107,14 @@ defmodule Timemanager.Users do
   """
   def change_user(%User{} = user, attrs \\ %{}) do
     User.changeset(user, attrs)
+  end
+
+  def authenticate_user(email) do
+    user = Repo.get_by(User, email: email)
+
+    case user do
+      nil -> {:error, :user_not_found}
+      _ -> {:ok, user.data}
+    end
   end
 end
