@@ -101,4 +101,8 @@ defmodule Timemanager.Clocks do
   def change_clock(%Clock{} = clock, attrs \\ %{}) do
     Clock.changeset(clock, attrs)
   end
+
+  def get_clocks_from_user(id) do
+    from(c in Clock, where: c.user == ^id) |> Repo.all()
+  end
 end

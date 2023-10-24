@@ -18,7 +18,8 @@ defmodule TimemanagerWeb.Router do
     pipe_through(:api)
     resources("/roles", RoleController, except: [:new, :edit])
     resources("/users", UserController, except: [:new, :edit])
-    resources("/clock", ClockController, except: [:new, :edit])
+    resources("/clock", ClockController, except: [:new, :edit, :index])
+    get("/clock/user/:id", ClockController, :show_clocks_from_user_id)
     resources("/working", WorkingtimeController, except: [:new, :edit])
     post("/login", UserController, :login)
   end
