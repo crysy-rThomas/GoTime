@@ -19,10 +19,15 @@ defmodule TimemanagerWeb.Router do
     resources("/roles", RoleController, except: [:new, :edit])
     resources("/users", UserController, except: [:new, :edit])
 <<<<<<< HEAD
+<<<<<<< HEAD
     resources("/roles", RoleController, except: [:new, :edit])
     resources("/clocks", ClockController)
 =======
     resources("/clock", ClockController, except: [:new, :edit])
+=======
+    resources("/clock", ClockController, except: [:new, :edit, :index])
+    get("/clock/user/:id", ClockController, :show_clocks_from_user_id)
+>>>>>>> 6a9259c2902d75acb3221326c7744480ecfff36f
     resources("/working", WorkingtimeController, except: [:new, :edit])
     post("/login", UserController, :login)
 >>>>>>> 9ae9edd67f5264890d679dbe5c6ad4abec0e7ef6

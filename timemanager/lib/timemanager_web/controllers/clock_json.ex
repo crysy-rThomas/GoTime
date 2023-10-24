@@ -15,6 +15,10 @@ defmodule TimemanagerWeb.ClockJSON do
     %{data: data(clock)}
   end
 
+  def error(%{error: error}) do
+    %{data: %{error: error}}
+  end
+
   defp data(%Clock{} = clock) do
     %{
       id: clock.id,
