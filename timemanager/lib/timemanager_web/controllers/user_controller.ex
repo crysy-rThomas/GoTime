@@ -21,18 +21,25 @@ defmodule TimemanagerWeb.UserController do
   end
 
   def show(conn, %{"id" => id}) do
-    user = Users.get_user!(id)
-    render(conn, :show, user: user)
+    user = Users.get_user(id)
+    case user do
+      {:ok, res} ->
+        render(conn, :show, user: res)
+      {:error, _reason} ->
+        conn
+        |> put_status(:ok)
+        |> render(:error, error: "Could not find user with id #{id}")
+    end
   end
 
   def update(conn, %{"id" => id, "user" => user_params}) do
-    case Users.get_user(id) do
-      {:ok, %User{}} ->
-        user = Users.get_user(id)
+    user = Users.get_user(id)
+    case user do
+      {:ok, res} ->
 
-        case Users.update_user(user, user_params) do
-          {:ok, %User{} = user} ->
-            render(conn, :show, user: user)
+        case Users.update_user(res, user_params) do
+          {:ok, res2} ->
+            render(conn, :show, user: res2)
 
           {:error, _reason} ->
             conn
@@ -48,15 +55,15 @@ defmodule TimemanagerWeb.UserController do
   end
 
   def delete(conn, %{"id" => id}) do
-    IO.puts("------UserStart-----")
-    case Users.get_user!(id) do
-      {:ok, %User{}} ->
-        IO.puts("------User-----")
-        user = Users.get_user!(id)
+    user = Users.get_user(id)
+    case user do
+      {:ok, res} ->
 
-        case Users.delete_user(user.user) do
-          {:ok, %User{}} ->
-            render(:no_content, "")
+        case Users.delete_user(res) do
+          {:ok, res2} ->
+            conn
+            |> put_status(:ok)
+            |> render(:showId, id: res2.id)
 
           {:error, _reason} ->
             conn
@@ -65,12 +72,10 @@ defmodule TimemanagerWeb.UserController do
         end
 
       {:error, _reason} ->
-        IO.puts("------UserError-----")
         conn
         |> put_status(:ok)
         |> render(:error, error: "Could not find user with id #{id}")
     end
-    IO.puts("------UserEnd-----")
   end
 
   def login(conn, %{"email" => email, "password" => password}) do
