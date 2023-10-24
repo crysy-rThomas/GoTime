@@ -6,16 +6,26 @@ defmodule TimemanagerWeb.TaskControllerTest do
   alias Timemanager.Tasks.Task
 
   @create_attrs %{
+<<<<<<< HEAD
     status: 42,
+=======
+>>>>>>> 59688609fb43e4d8fbc507e69fe6932cef6a2633
     description: "some description",
     title: "some title"
   }
   @update_attrs %{
+<<<<<<< HEAD
     status: 43,
     description: "some updated description",
     title: "some updated title"
   }
   @invalid_attrs %{status: nil, description: nil, title: nil}
+=======
+    description: "some updated description",
+    title: "some updated title"
+  }
+  @invalid_attrs %{description: nil, title: nil}
+>>>>>>> 59688609fb43e4d8fbc507e69fe6932cef6a2633
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
@@ -38,7 +48,10 @@ defmodule TimemanagerWeb.TaskControllerTest do
       assert %{
                "id" => ^id,
                "description" => "some description",
+<<<<<<< HEAD
                "status" => 42,
+=======
+>>>>>>> 59688609fb43e4d8fbc507e69fe6932cef6a2633
                "title" => "some title"
              } = json_response(conn, 200)["data"]
     end
@@ -61,7 +74,10 @@ defmodule TimemanagerWeb.TaskControllerTest do
       assert %{
                "id" => ^id,
                "description" => "some updated description",
+<<<<<<< HEAD
                "status" => 43,
+=======
+>>>>>>> 59688609fb43e4d8fbc507e69fe6932cef6a2633
                "title" => "some updated title"
              } = json_response(conn, 200)["data"]
     end
