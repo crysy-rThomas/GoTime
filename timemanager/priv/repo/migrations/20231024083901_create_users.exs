@@ -3,10 +3,13 @@ defmodule Timemanager.Repo.Migrations.CreateUsers do
 
   def change do
     create table(:users) do
-      add :first_name, :string
-      add :last_name, :string
+      add :firstname, :string
+      add :lastname, :string
+      add :role, references(:roles, on_delete: :nothing)
 
       timestamps(type: :utc_datetime)
     end
+
+    create index(:users, [:role])
   end
 end

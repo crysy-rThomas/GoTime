@@ -1,3 +1,4 @@
 *.pdf
 postgres-data
 pgdata
+*.json

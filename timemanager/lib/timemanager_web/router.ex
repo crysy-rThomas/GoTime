@@ -16,7 +16,7 @@ defmodule TimemanagerWeb.Router do
 
   scope "/api", TimemanagerWeb do
     pipe_through(:api)
-    resources("/users", PersonController, except: [:new, :edit])
+    resources("/users", UserController, except: [:new, :edit])
     resources("/tasks", TaskController, except: [:new, :edit])
     get("/tasks/users/:user_id", TaskController, :user_tasks)
   end
