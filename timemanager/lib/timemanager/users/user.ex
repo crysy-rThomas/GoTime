@@ -1,4 +1,4 @@
-defmodule Timemanager.User do
+defmodule Timemanager.Users.User do
   use Ecto.Schema
   import Ecto.Changeset
 

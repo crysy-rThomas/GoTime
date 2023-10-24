@@ -1,9 +1,9 @@
-defmodule Timemanager.Task do
+defmodule Timemanager.Tasks.Task do
   use Ecto.Schema
   import Ecto.Changeset
 
   schema "tasks" do
-    field :status, :string
+    field :status, :integer
     field :description, :string
     field :title, :string
     field :user_id, :id
