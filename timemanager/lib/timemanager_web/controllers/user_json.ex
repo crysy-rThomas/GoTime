@@ -19,7 +19,9 @@ defmodule TimemanagerWeb.UserJSON do
     %{
       id: user.id,
       firstname: user.firstname,
-      lastname: user.lastname
+      lastname: user.lastname,
+      email: user.email,
+      password: user.password
     }
   end
 end
