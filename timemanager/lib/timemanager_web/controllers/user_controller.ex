@@ -3,12 +3,39 @@ defmodule TimemanagerWeb.UserController do
 
   alias Timemanager.Users
   alias Timemanager.Users.User
+  alias Timemanager.Tokens
+  alias Timemanager.Tokens.Token
 
   action_fallback(TimemanagerWeb.FallbackController)
 
   def index(conn, _params) do
-    users = Users.list_users()
-    render(conn, :index, users: users)
+    tokenHeader = Tokens.from_request(conn)
+    case tokenHeader do
+      nil ->
+        conn
+        |> put_status(:ok)
+        |> render(:error, error: "No token provided")
+      _ ->
+        token = Tokens.get_token_from_token(tokenHeader)
+        IO.inspect(token)
+        case token do
+          {:ok, token} ->
+            user = Users.get_user(token.user)
+            case user do
+              {:ok, user} ->
+                users = Users.list_users()
+                render(conn, :index, users: users)
+              {:error, _reason} ->
+                conn
+                |> put_status(:ok)
+                |> render(:error, error: "Could not find user with id #{token.user}")
+            end
+          {:error, _reason} ->
+            conn
+            |> put_status(:ok)
+            |> render(:error, error: "Invalid token")
+        end
+    end
   end
 
   def create(conn, %{"user" => user_params}) do
@@ -82,6 +109,7 @@ defmodule TimemanagerWeb.UserController do
     case Users.authenticate_user(email, password) do
       {:ok, user} ->
         token = Phoenix.Token.sign(TimemanagerWeb.Endpoint, "user auth", user.id)
+        Tokens.create_token(%{token: token, user: user.id})
 
         conn
         |> put_status(:ok)

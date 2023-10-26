@@ -15,3 +15,7 @@ mix ecto.migrate
 # create workingtimes table
 mix phx.gen.json Workingtimes Workingtime workingtimes user:references:users start_time:datetime end_time:datetime
 mix ecto.migrate
+
+# create tokens table
+mix phx.gen.json Tokens Token tokens user:references:users token:string
+mix ecto.migrate

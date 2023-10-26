@@ -45,10 +45,13 @@ class _SplashscreenState extends State<Splashscreen> {
           body: SizedBox(
             width: size.width,
             height: size.height,
-            child: const Center(
-              child: Image(
-                image: AssetImage("assets/Connexion.png"),
-                fit: BoxFit.fitWidth,
+            child: const Padding(
+              padding: EdgeInsets.all(32.0),
+              child: Center(
+                child: Image(
+                  image: AssetImage("assets/logo.png"),
+                  fit: BoxFit.fitWidth,
+                ),
               ),
             ),
           ),
