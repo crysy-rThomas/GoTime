@@ -103,6 +103,7 @@ defmodule Timemanager.Tokens do
   end
 
   def from_request(conn) do
+    IO.inspect(get_req_header(conn, "authorization"))
     case get_req_header(conn, "authorization") do
       nil -> nil
       "Bearer " <> token -> token
@@ -112,8 +113,10 @@ defmodule Timemanager.Tokens do
 
   def get_req_header(conn, key) do
     key = String.downcase(key)
-    Enum.find(conn.req_headers, fn {k, _} -> String.downcase(k) == key end)
-    |> elem(1)
+    case Enum.find(conn.req_headers, fn {k, _} -> String.downcase(k) == key end) do
+      nil -> nil
+      {_k, v} -> v
+    end
   end
 
   def get_token_from_token(token) do

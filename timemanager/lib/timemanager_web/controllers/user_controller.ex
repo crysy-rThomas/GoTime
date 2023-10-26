@@ -9,13 +9,17 @@ defmodule TimemanagerWeb.UserController do
   action_fallback(TimemanagerWeb.FallbackController)
 
   def index(conn, _params) do
+    IO.inspect("---------tokenHeader Start---------")
     tokenHeader = Tokens.from_request(conn)
+    IO.inspect("---------tokenHeader---------")
     case tokenHeader do
       nil ->
+        IO.inspect("---------tokenHeade rnil---------")
         conn
         |> put_status(:ok)
         |> render(:error, error: "No token provided")
       _ ->
+        IO.inspect("---------tokenHeader not nil---------")
         token = Tokens.get_token_from_token(tokenHeader)
         IO.inspect(token)
         case token do
