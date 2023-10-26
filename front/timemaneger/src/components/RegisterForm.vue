@@ -10,15 +10,34 @@
                 <div id="bottom-div">
                     <!--logo-->
                     <img id="logo" src="../assets/logo.png">
-                    <label for="firstname">First Name:</label>
-                    <input type="text" name="firstname" id="firstname">
-                    <label for="lastname">Last Name:</label>
-                    <input type="text" name="lastname" id="lastname">
-                    <label for="email">Email:</label>
-                    <input type="email" name="email" id="email">
-                    <label for="password">Password:</label>
-                    <input type="password" name="password" id="password">
-                    <input type="submit" value="Register" name="Submit">
+                    <form @submit.prevent="handleSubmit">
+                        <div id="inputs">
+                            
+                            <div class="input-group">
+                                <label for="firstname">First Name:</label>
+                                <input type="text" name="firstname" id="firstname" v-model="firstname">
+                            </div>
+
+                            <div class="input-group">
+                                <label for="lastname">Last Name:</label>
+                                <input type="text" name="lastname" id="lastname" v-model="lastname">
+                            </div>
+
+                            <div class="input-group">
+                                <label for="email">Email:</label>
+                                <input type="email" name="email" id="email" v-model="email">
+                            </div>
+
+                            <div class="input-group">
+                                <label for="password">Password:</label>
+                                <input type="password" name="password" id="password" v-model="password">
+                            </div>
+
+                        </div>    
+                        <div style="width: 80%; margin: auto;">
+                            <input type="submit" value="Register" name="Submit">
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -26,8 +45,28 @@
 </template>
 
 <script>
+    import { addUser } from '@/services/userService'; // Update the path accordingly
     export default {
-        name: 'RegisterForm'
+        name: 'RegisterForm',
+        data() {
+            return {
+                email: '',
+                firstname: '',
+                lastname: '',
+                password: '', 
+            }
+        },
+        methods: {
+        async handleSubmit() {
+            console.log("ZEGZEGZEGZEG");
+            try {
+                const response = await addUser(this.email, this.firstname, this.lastname, this.password);
+                console.log(response.data);
+            } catch (error) {
+                console.error('Error adding user:', error);
+            }
+        }
+    }
     }
 </script>
 
@@ -41,11 +80,16 @@ p, input, h1, h2, h2, label {
     font-family: 'Open Sans', sans-serif;
 }
 
+form{
+    width: 100%;
+    height: 100%;
+}
+
 #top-div {
-    height: 30%; /* Adjusted height */
-    width: 100%; /* Full width */
+    height: 30%;
+    width: 100%;
     background-color: white;
-    background-image: url('../assets/connexion.png');
+    background-image: url('../assets/gotham.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -54,17 +98,23 @@ p, input, h1, h2, h2, label {
 
 #bottom-div {
     background-color: rgb(232, 233, 235);
-    height: 70%; /* Adjusted height */
-    padding: 30px; /* Increased padding for spacing */
+    height: 70%;
+    padding: 30px; /* Unified padding */
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-around; /* Distribute space around items */
+    justify-content: space-evenly; /* Distribute space evenly */
     border-radius: 0 0 20px 20px;
 }
 
+#inputs{
+    width: 80%;
+    margin: auto;
+}
+
+
 #main-div {
-    height: 800px; /* Increased height */
+    height: 800px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -79,27 +129,70 @@ p, input, h1, h2, h2, label {
 }
 
 #logo {
-    width: 100px !important;
+    width: 100px;
     height: auto;
-    margin-bottom: 20px;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
 }
 
+.input-group {
+    position: relative;
+    width: 100%;
+    margin: 20px 0;
+}
+
+.input-group label {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    font-size: 16px;
+    color: #888;
+    pointer-events: none;
+    transition: top 0.3s ease, font-size 0.3s ease, color 0.3s ease; 
+}
+
+input[type="text"]:focus + label,
+input[type="text"]:not(:placeholder-shown) + label,
+input[type="email"]:focus + label,
+input[type="email"]:not(:placeholder-shown) + label,
+input[type="password"]:focus + label,
+input[type="password"]:not(:placeholder-shown) + label {
+    top: -10px;
+    left: 5px;
+    font-size: 12px;
+    color: rgb(34, 64, 181);
+}
+
+/* Common input styles */
 input[type="text"], 
 input[type="email"], 
 input[type="password"], 
 input[type="submit"] {
-    width: 80%;
-    margin: 15px 0; /* Increased margin for more spacing */
-    padding: 10px;
+    width: 100%;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 8px;
+    background-color: #f7f9fc;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    margin: 10px 0;
+    font-size: 16px;
+    font-family: 'Open Sans', sans-serif;
+    color: #333;
+    outline: none;
 }
 
+/* Specific styles for submit button */
 input[type="submit"] {
+    width: 100%;
     background-color: rgb(34, 64, 181);
     color: white;
-    border: none;
     cursor: pointer;
     border-radius: 15px;
-    height: 40px;
+    height: 50px;
     font-weight: bold;
 }
 
@@ -108,8 +201,8 @@ input[type="submit"]:hover {
 }
 
 #main-container {
-    min-width: 50%;
-    max-width: 1000px;
+    min-width: 40%;
+    max-width: 800px;
     height: 100%;
     display: flex;
     justify-content: center;
@@ -117,5 +210,21 @@ input[type="submit"]:hover {
     margin: auto;
     position: relative;
 }
+
+/* Placeholder styling */
+input[type="text"]::placeholder, 
+input[type="password"]::placeholder, 
+input[type="email"]::placeholder {
+    color: #888;
+    opacity: 1;
+}
+
+input[type="text"]:focus, 
+input[type="password"]:focus, 
+input[type="email"]:focus {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
 
 </style>

@@ -9,7 +9,7 @@
           <!--connexion container-->
           <div id="right-div">
               <!--logo-->
-              <img id="logo" src="../assets/logo.png">
+              <img id="logo" src="../assets/png/logo-no-background.png">
               <label for="identity">User :</label>
               <input type="text" name="identity" id="">
               <label for="password">Password :</label>
@@ -43,7 +43,7 @@
   width: 50%;
   background-color: white;
   border-radius: 20px 0 0 20px;
-  background-image: url('../assets/connexion.png');
+  background-image: url('../assets/gotham.jpg');
   background-size: cover; /* To cover the entire div */
   background-repeat: no-repeat; /* So the image doesn't repeat */
   background-position: center; /* Center the image */
@@ -79,7 +79,7 @@
 }
 
 #logo {
-  width: 100px !important;
+  width: 150px !important;
   height: auto;
   margin-bottom: 20px; /* Space between logo and the next input field */
 }

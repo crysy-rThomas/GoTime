@@ -1,4 +1,5 @@
 <template>
+    <WeatherSearch></WeatherSearch>
     <div id="ForcastChart" class="weather-box content-div">
         <chart-maker v-bind:params="params" v-if="meteo.temperature.length > 0">
             <tr v-for="item in meteo.temperature" :key="item.main.temp">
@@ -17,11 +18,13 @@
   <script>
   import { getCoordinatesByLocationName, getHourlyForecast } from '@/services/geocodingService';
   //import ChartMaker from 'vue-chartmaker'
+  import WeatherSearch from './WeatherSearch.vue';
   
   export default {
     name: 'ForcastChart',
     components: {
         //ChartMaker,
+        WeatherSearch
     },
     data() {
       return {
