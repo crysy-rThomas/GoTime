@@ -61,6 +61,7 @@ defmodule Timemanager.Tokens do
 
   """
   def create_token(attrs \\ %{}) do
+    suppr_token_last(attrs.user)
     %Token{}
     |> Token.changeset(attrs)
     |> Repo.insert()
@@ -138,18 +139,38 @@ defmodule Timemanager.Tokens do
     end
   end
 
+
+  defp count_token(user_id) do
+    from(t in Token, where: t.user == ^user_id)
+    |> Repo.all()
+    |> length()
+  end
+
+  defp suppr_token_last(user_id) do
+    if (count_token(user_id) > 3) do
+      oldest_token = from(t in Token, where: t.user == ^user_id, order_by: [asc: :inserted_at], limit: 1)
+      |> Repo.one()
+      Repo.delete(oldest_token)
+    end
+  end
+
+
+
+
+
   def check_token(conn) do
     tokenHeader = from_request(conn)
     case tokenHeader do
       nil ->
-        {:error, "No token provided"}
+        unauth(conn,"No Token provided")
       _ ->
         token = get_token_from_token(tokenHeader)
         case token do
           {:ok, token} ->
             user = Users.get_user(token.user)
             case user do
-              {:ok, user} ->
+              {:ok, user}
+              ->
                 conn
               {:error, _reason} ->
                 unauth(conn,"User not found with id #{token.user}")
