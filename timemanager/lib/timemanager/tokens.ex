@@ -7,6 +7,15 @@ defmodule Timemanager.Tokens do
   alias Timemanager.Repo
 
   alias Timemanager.Tokens.Token
+  alias Timemanager.Users
+
+  def init(_arg) do
+  end
+
+  def call(conn, _opts) do
+    check_token(conn)
+  end
+
 
   @doc """
   Returns the list of tokens.
@@ -125,6 +134,28 @@ defmodule Timemanager.Tokens do
       {:ok, token}
     else
       {:error, "Token not found"}
+    end
+  end
+
+  def check_token(conn) do
+    tokenHeader = from_request(conn)
+    case tokenHeader do
+      nil ->
+        {:error, "No token provided"}
+      _ ->
+        token = get_token_from_token(tokenHeader)
+        case token do
+          {:ok, token} ->
+            user = Users.get_user(token.user)
+            case user do
+              {:ok, user} ->
+                conn
+              {:error, _reason} ->
+                {:error, "User not found with id #{token.user}", conn}
+              end
+            {:error, _reason} ->
+              {:error, "invalid token", conn}
+        end
     end
   end
 end
