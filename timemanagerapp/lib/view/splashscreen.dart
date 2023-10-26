@@ -4,6 +4,7 @@ import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:timemanagerapp/service/authentification.dart';
 
 class Splashscreen extends StatefulWidget {
   const Splashscreen({super.key});
@@ -15,7 +16,7 @@ class Splashscreen extends StatefulWidget {
 class _SplashscreenState extends State<Splashscreen> {
   Future<bool> getInfo() async {
     await Future.delayed(const Duration(seconds: 2));
-    return false;
+    return await Authentification().isSignedIn();
   }
 
   @override
@@ -29,17 +30,17 @@ class _SplashscreenState extends State<Splashscreen> {
     return FutureBuilder<bool>(
       future: getInfo(),
       builder: (context, snapshot) {
-        // if (snapshot.connectionState == ConnectionState.done) {
-        //   if (snapshot.hasData && snapshot.data == true) {
-        //     WidgetsBinding.instance.addPostFrameCallback((_) {
-        //       Navigator.pushReplacementNamed(context, '/home');
-        //     });
-        //   } else {
-        //     WidgetsBinding.instance.addPostFrameCallback((_) {
-        //       Navigator.pushReplacementNamed(context, '/login');
-        //     });
-        //   }
-        // }
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasData && snapshot.data == true) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.pushReplacementNamed(context, '/home');
+            });
+          } else {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.pushReplacementNamed(context, '/login');
+            });
+          }
+        }
         return Scaffold(
           backgroundColor: Colors.white,
           body: SizedBox(
