@@ -2,12 +2,14 @@ defmodule Timemanager.Tokens do
   @moduledoc """
   The Tokens context.
   """
-
   import Ecto.Query, warn: false
+  import Plug.Conn
   alias Timemanager.Repo
+  alias Timemanager.Tokens
 
   alias Timemanager.Tokens.Token
   alias Timemanager.Users
+
 
   def init(_arg) do
   end
@@ -112,8 +114,7 @@ defmodule Timemanager.Tokens do
   end
 
   def from_request(conn) do
-    IO.inspect(get_req_header(conn, "authorization"))
-    case get_req_header(conn, "authorization") do
+    case Tokens.get_req_header(conn, "authorization") do
       nil -> nil
       "Bearer " <> token -> token
       _ -> nil
@@ -151,11 +152,17 @@ defmodule Timemanager.Tokens do
               {:ok, user} ->
                 conn
               {:error, _reason} ->
-                {:error, "User not found with id #{token.user}", conn}
-              end
-            {:error, _reason} ->
-              {:error, "invalid token", conn}
+                unauth(conn,"User not found with id #{token.user}")
+            end
+          {:error, _reason} ->
+            unauth(conn,"Token invalid")
         end
     end
+  end
+
+  defp unauth(conn,message) do
+    conn
+    |> put_resp_content_type("application/json")
+    |> send_resp(401,Jason.encode!(%{message: message}))
   end
 end

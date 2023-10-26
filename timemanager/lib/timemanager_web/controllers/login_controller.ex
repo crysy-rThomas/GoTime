@@ -3,7 +3,6 @@ defmodule TimemanagerWeb.LoginController do
 
   alias Timemanager.Users
   alias Timemanager.Tokens
-  alias Timemanager.Tokens.Token
 
 
   def login(conn, %{"email" => email, "password" => password}) do

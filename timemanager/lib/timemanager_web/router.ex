@@ -1,7 +1,6 @@
 defmodule TimemanagerWeb.Router do
   use TimemanagerWeb, :router
 
-  alias Timemanager.Tokens
 
   pipeline :browser do
     plug(:accepts, ["html"])

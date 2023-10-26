@@ -3,8 +3,6 @@ defmodule TimemanagerWeb.UserController do
 
   alias Timemanager.Users
   alias Timemanager.Users.User
-  alias Timemanager.Tokens
-  alias Timemanager.Tokens.Token
 
   action_fallback(TimemanagerWeb.FallbackController)
 
