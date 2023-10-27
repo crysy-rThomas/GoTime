@@ -51,12 +51,10 @@ defmodule Timemanager.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:plug_cowboy, "~> 2.5"},
-<<<<<<< HEAD
       {:pow, "~> 1.0"},
       {:joken, "~> 2.2"}
-=======
       {:ex_doc, "~> 0.21", only: :dev, runtime: false}
->>>>>>> 6a9259c2902d75acb3221326c7744480ecfff36f
+      {:cors_plug, "~> 3.0"}
     ]
   end
 

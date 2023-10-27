@@ -12,8 +12,6 @@ defmodule Timemanager.TasksFixtures do
       attrs
       |> Enum.into(%{
         description: "some description",
-<<<<<<< HEAD
-=======
         status: "some status",
         title: "some title"
       })
@@ -30,7 +28,6 @@ defmodule Timemanager.TasksFixtures do
       attrs
       |> Enum.into(%{
         description: "some description",
->>>>>>> 59688609fb43e4d8fbc507e69fe6932cef6a2633
         status: 42,
         title: "some title"
       })
@@ -38,8 +35,6 @@ defmodule Timemanager.TasksFixtures do
 
     task
   end
-<<<<<<< HEAD
-=======
 
   @doc """
   Generate a task.
@@ -55,5 +50,4 @@ defmodule Timemanager.TasksFixtures do
 
     task
   end
->>>>>>> 59688609fb43e4d8fbc507e69fe6932cef6a2633
 end

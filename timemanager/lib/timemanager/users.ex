@@ -109,12 +109,16 @@ defmodule Timemanager.Users do
     User.changeset(user, attrs)
   end
 
-  def authenticate_user(email) do
+  def authenticate_user(email, password) do
     user = Repo.get_by(User, email: email)
-
-    case user do
-      nil -> {:error, :user_not_found}
-      _ -> {:ok, user.data}
+    if (user != nil) do
+      if (user.password == password) do
+        {:ok, user}
+      else
+        {:error, "Wrong password"}
+      end
+    else
+      {:error, "User not found"}
     end
   end
 end

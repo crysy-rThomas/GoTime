@@ -1,6 +1,7 @@
 defmodule TimemanagerWeb.Router do
   use TimemanagerWeb, :router
 
+
   pipeline :browser do
     plug(:accepts, ["html"])
     plug(:fetch_session)
@@ -12,24 +13,29 @@ defmodule TimemanagerWeb.Router do
 
   pipeline :api do
     plug(:accepts, ["json"])
+    plug Timemanager.Tokens, :check_token
+  end
+
+  pipeline :api_without_token do
+    plug(:accepts, ["json"])
   end
 
   scope "/api", TimemanagerWeb do
     pipe_through(:api)
+
     resources("/roles", RoleController, except: [:new, :edit])
     resources("/users", UserController, except: [:new, :edit])
-<<<<<<< HEAD
-<<<<<<< HEAD
-    resources("/roles", RoleController, except: [:new, :edit])
-    resources("/clocks", ClockController)
-=======
-    resources("/clock", ClockController, except: [:new, :edit])
-=======
     resources("/clock", ClockController, except: [:new, :edit, :index])
     get("/clock/user/:id", ClockController, :show_clocks_from_user_id)
->>>>>>> 6a9259c2902d75acb3221326c7744480ecfff36f
     resources("/working", WorkingtimeController, except: [:new, :edit])
+    get("/working/user/:id", WorkingtimeController, :show_working_from_user_id)
     post("/login", UserController, :login)
->>>>>>> 9ae9edd67f5264890d679dbe5c6ad4abec0e7ef6
   end
+
+  scope "/", TimemanagerWeb do
+    pipe_through(:api_without_token)
+    post("/login", LoginController, :login)
+  end
+
+
 end

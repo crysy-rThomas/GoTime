@@ -101,4 +101,8 @@ defmodule Timemanager.Workingtimes do
   def change_workingtime(%Workingtime{} = workingtime, attrs \\ %{}) do
     Workingtime.changeset(workingtime, attrs)
   end
+
+  def get_working_from_user(id) do
+    from(c in Workingtime, where: c.user == ^id) |> Repo.all()
+  end
 end

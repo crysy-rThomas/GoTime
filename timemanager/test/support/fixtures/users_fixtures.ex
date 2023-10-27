@@ -11,10 +11,8 @@ defmodule Timemanager.UsersFixtures do
     {:ok, user} =
       attrs
       |> Enum.into(%{
-<<<<<<< HEAD
         first_name: "some first_name",
         last_name: "some last_name"
-=======
         firstname: "some firstname",
         lastname: "some lastname"
       })
@@ -50,7 +48,6 @@ defmodule Timemanager.UsersFixtures do
         firstname: "some firstname",
         lastname: "some lastname",
         password: "some password"
->>>>>>> 59688609fb43e4d8fbc507e69fe6932cef6a2633
       })
       |> Timemanager.Users.create_user()
 

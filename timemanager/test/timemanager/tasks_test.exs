@@ -21,8 +21,6 @@ defmodule Timemanager.TasksTest do
     end
 
     test "create_task/1 with valid data creates a task" do
-<<<<<<< HEAD
-=======
       valid_attrs = %{status: "some status", description: "some description", title: "some title"}
 
       assert {:ok, %Task{} = task} = Tasks.create_task(valid_attrs)
@@ -81,7 +79,6 @@ defmodule Timemanager.TasksTest do
     end
 
     test "create_task/1 with valid data creates a task" do
->>>>>>> 59688609fb43e4d8fbc507e69fe6932cef6a2633
       valid_attrs = %{status: 42, description: "some description", title: "some title"}
 
       assert {:ok, %Task{} = task} = Tasks.create_task(valid_attrs)
@@ -121,8 +118,6 @@ defmodule Timemanager.TasksTest do
       assert %Ecto.Changeset{} = Tasks.change_task(task)
     end
   end
-<<<<<<< HEAD
-=======
 
   describe "tasks" do
     alias Timemanager.Tasks.Task
@@ -179,5 +174,4 @@ defmodule Timemanager.TasksTest do
       assert %Ecto.Changeset{} = Tasks.change_task(task)
     end
   end
->>>>>>> 59688609fb43e4d8fbc507e69fe6932cef6a2633
 end
