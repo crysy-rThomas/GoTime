@@ -2,6 +2,7 @@
     <div id="main-page">
         <sideBar></sideBar>
         <div id="main-content">
+            <ClockComponent></ClockComponent>
             <div style="margin-bottom: 30px;">
                 <graphComponent></graphComponent>
             </div>
@@ -18,9 +19,11 @@
     import sideBar from "./sideBar.vue";
     import hourlyResume from "./hourlyResume.vue";
     import graphComponent from "./graphComponent.vue"
+    import ClockComponent from './ClockComponent.vue'
     export default {
         components: {
             sideBar,
+            ClockComponent,
             hourlyResume,
             graphComponent
         },
