@@ -41,7 +41,7 @@ export default {
   <style scoped>
     #navbar{
         display: flex;
-        width: calc(60% + 30px);    ;
+        width: calc(100% + 30px);    ;
     }
     .nav-item{
         text-align: center;
@@ -55,7 +55,7 @@ export default {
     }
 
     .cont{
-        width: calc(60% + 30px);;
+        width: calc(100% + 30px);;
         height: 200px;
     }
 

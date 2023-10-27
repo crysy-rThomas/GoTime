@@ -14,6 +14,9 @@
                 <div id="statusColorContainer">
                     <div id="statusColor" :style="{ backgroundColor: statusColor, boxShadow: boxShadowStatus }"></div>
                 </div>
+                <div id="statusColorContainer">
+                    <div id="statusColor" :style="{ backgroundColor: statusColor, boxShadow: boxShadowStatus }"></div>
+                </div>
             </div>
             <div id="clock">
                 <button id="clock" @click="clockChange()">
@@ -98,7 +101,12 @@ h1 {
 }
 
 #datetime {
-    width: 170px;
+    background-color: white;
+    border: 1px solid #cecece;
+    padding-bottom: 5px;
+    width: 20%;
+    padding-top: 5px;
+    border-radius: 20px;
     margin-top: 0px;
     margin-right: 10vw;
     align-items: center;
