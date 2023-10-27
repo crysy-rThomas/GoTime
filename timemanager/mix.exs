@@ -52,7 +52,8 @@ defmodule Timemanager.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:plug_cowboy, "~> 2.5"},
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
-      {:cors_plug, "~> 3.0"}
+      {:cors_plug, "~> 3.0"},
+      {:comeonin, "~> 5.4"}
     ]
   end
 
