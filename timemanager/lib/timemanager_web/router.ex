@@ -28,11 +28,14 @@ defmodule TimemanagerWeb.Router do
     resources("/clocks", ClockController, except: [:new, :edit, :index])
     get("/clock/user/:id", ClockController, :show_clocks_from_user_id)
     resources("/working", WorkingtimeController, except: [:new, :edit])
+    get("/working/user/:id", WorkingtimeController, :show_working_from_user_id)
+    post("/login", UserController, :login)
   end
 
   scope "/", TimemanagerWeb do
     pipe_through(:api_without_token)
     post("/login", LoginController, :login)
+    post("/register", UserController, :create)
   end
 
 

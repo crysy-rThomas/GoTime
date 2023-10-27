@@ -4,7 +4,7 @@ FROM node:lts-alpine
 RUN npm install -g http-server
 
 # définit le dossier 'app' comme dossier de travail
-WORKDIR /app
+WORKDIR /front/timemaneger
 
 # copie 'package.json' et 'package-lock.json' (si disponible)
 COPY package*.json ./
