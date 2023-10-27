@@ -4,7 +4,7 @@ defmodule Timemanager.Users do
   """
 
   import Ecto.Query, warn: false
-  alias Comeonin.Bcrypt
+  import Bcrypt
   alias Timemanager.Repo
   alias Timemanager.Users.User
 
@@ -57,9 +57,6 @@ defmodule Timemanager.Users do
 
   """
   def create_user(attrs \\ %{}) do
-
-    pass = attrs["password"]
-    hash_pwd_salt(pass)
     %User{}
     |> User.changeset(attrs)
     |> Repo.insert()
@@ -115,24 +112,17 @@ defmodule Timemanager.Users do
 
   def authenticate_user(email, password) do
     user = Repo.get_by(User, email: email)
-    if (user != nil) do
-      if (user.password == password) do
-        {:ok, user}
-      else
-        {:error, "Wrong password"}
-      end
-    else
-      {:error, "User not found"}
+
+    case user do
+      nil ->
+        {:error, "User not found"}
+      %User{password: password_hash} ->
+        case Bcrypt.verify_pass(password, password_hash) do
+          true ->
+            {:ok, user}
+          false ->
+            {:error, "Incorrect password"}
+        end
     end
   end
-
-    def hash_pwd_salt(password, opts \\ []) do
-      Base.hash_password(
-        password,
-        BCrypt.gen_salt(
-          Keyword.get(opts, :log_rounds, Application.get_env(:bcrypt_elixir, :log_rounds, 12)),
-          Keyword.get(opts, :legacy, false)
-        )
-      )
-    end
 end
