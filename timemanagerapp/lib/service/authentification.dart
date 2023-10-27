@@ -14,7 +14,7 @@ class Authentification {
     const FlutterSecureStorage storage = FlutterSecureStorage();
     try {
       final res = await Dio().post(
-        'https://timemanager-epitech-mpl.gigalixirapp.com/api/login',
+        'https://timemanager-epitech-mpl.gigalixirapp.com/login',
         data: {
           "email": email,
           "password": password,

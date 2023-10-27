@@ -28,6 +28,7 @@ class _SettingsState extends State<Settings> {
     String? notif = await storage.read(key: 'notifications');
     String? face = await storage.read(key: 'faceId');
     int? myId = int.tryParse(await storage.read(key: 'id') ?? "-1");
+    print(myId);
     if (myId != null && myId != -1) {
       user = await UserService().getUser(myId);
     }
