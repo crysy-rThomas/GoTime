@@ -154,10 +154,6 @@ defmodule Timemanager.Tokens do
     end
   end
 
-
-
-
-
   def check_token(conn) do
     tokenHeader = from_request(conn)
     case tokenHeader do
