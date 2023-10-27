@@ -35,6 +35,7 @@ defmodule TimemanagerWeb.Router do
   scope "/", TimemanagerWeb do
     pipe_through(:api_without_token)
     post("/login", LoginController, :login)
+    post("/register", UserController, :create)
   end
 
 
