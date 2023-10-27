@@ -1,6 +1,9 @@
 <template>
     <div id="sidebar">
       <div id="container">
+        <div>
+          <img id="small-logo" src="../assets/logo-small-no-txt.png">
+        </div>
         <div class="icon-grp">
         <div class="icon-grp-item">
           <svg class="icon" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"><path d="M520-600v-240h320v240H520ZM120-440v-400h320v400H120Zm400 320v-400h320v400H520Zm-400 0v-240h320v240H120Zm80-400h160v-240H200v240Zm400 320h160v-240H600v240Zm0-480h160v-80H600v80ZM200-200h160v-80H200v80Zm160-320Zm240-160Zm0 240ZM360-280Z"/></svg>          
@@ -52,6 +55,11 @@
       background-color: white;
       width: 100px;
       box-shadow: 11px 1px 31px -10px #cfcfcf;
+      transition: box-shadow 0.5s ease-in-out;
+    }
+
+    #sidebar:hover{
+      box-shadow: 11px 1px 31px -10px #adadad;
     }
     .icon{
       width: 40px;
@@ -65,6 +73,11 @@
       position: absolute;
       margin-left: 10px;
       top: 40%;
+    }
+
+    #small-logo{
+      height: 35px;
+      margin-top: 25px;
     }
   </style>
   

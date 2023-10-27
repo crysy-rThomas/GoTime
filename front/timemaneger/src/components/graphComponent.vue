@@ -44,7 +44,7 @@ export default {
 <style>
 #graph-content {
   padding: 15px;
-  width: 60%;
+  width: 100%;
   height: auto;
   border: 1px solid #c0c0c0;
   border-radius: 20px;
