@@ -21,6 +21,7 @@ defmodule TimemanagerWeb.Router do
     resources("/clock", ClockController, except: [:new, :edit, :index])
     get("/clock/user/:id", ClockController, :show_clocks_from_user_id)
     resources("/working", WorkingtimeController, except: [:new, :edit])
+    get("/working/user/:id", WorkingtimeController, :show_working_from_user_id)
     post("/login", UserController, :login)
   end
 end
