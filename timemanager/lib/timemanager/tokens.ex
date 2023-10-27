@@ -161,6 +161,7 @@ defmodule Timemanager.Tokens do
         unauth(conn,"No Token provided")
       _ ->
         token = get_token_from_token(tokenHeader)
+        check_token_age(token, conn)
         case token do
           {:ok, token} ->
             user = Users.get_user(token.user)
@@ -182,4 +183,25 @@ defmodule Timemanager.Tokens do
     |> put_resp_content_type("application/json")
     |> send_resp(401,Jason.encode!(%{message: message}))
   end
+
+
+  defp check_token_age(token, conn) do
+    case token do
+      {:ok, token} ->
+
+        age_in_minutes = DateTime.diff(DateTime.utc_now(), token.inserted_at, :minute)
+
+        if (age_in_minutes > 30) do
+            suppr_token_last(token.user)
+            unauth(conn,"Token to old")
+        else
+            {:ok, token}
+        end
+      {:error, _reason} ->
+        {:error, "Token invalid"}
+    end
+
+  end
+
+
 end
