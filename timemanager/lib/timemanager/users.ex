@@ -4,7 +4,6 @@ defmodule Timemanager.Users do
   """
 
   import Ecto.Query, warn: false
-  import Bcrypt
   alias Timemanager.Repo
   alias Timemanager.Users.User
 
