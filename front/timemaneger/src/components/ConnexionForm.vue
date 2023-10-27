@@ -10,12 +10,14 @@
           <div id="right-div">
               <!--logo-->
               <img id="logo" src="../assets/png/logo-no-background.png">
-              <label for="identity">User :</label>
-              <input type="text" name="identity" id="">
-              <label for="password">Password :</label>
-              <input type="password" name="password" id="">
-              <p>don't have an account yet? you can <a href="">register here</a></p>
-              <input type="submit" value="Submit" name="Submit">
+              <form @submit.prevent="handleSubmit">
+                <label for="email">Email :</label>
+                <input type="text" name="email" v-model="email">
+                <label for="password">Password :</label>
+                <input type="password" name="password" v-model="password">
+                <p>don't have an account yet? you can <a href="">register here</a></p>
+                <input type="submit" value="Submit" name="Submit">
+              </form>
           </div>
       </div>
     </div>
@@ -23,10 +25,34 @@
 </template>
   
   <script>
+    import { login } from '@/services/userService';
+    import { mapMutations } from "vuex";
+
     export default {
-      name: 'ConnexionForm'
+      name: 'ConnexionForm',
+      data () {
+          return {
+            email: '',
+            password: '',
+          }
+      },
+      methods: {
+          ...mapMutations(["setToken"]),
+          async handleSubmit() {
+          try {
+            const response = await login(this.email, this.password);
+            if (response.data && response.data.data) {
+              this.setToken(response.data.data.token);
+              console.log(response.data.data.token);
+            }
+          } catch (err) {
+            this.error = err;
+          }
+        }
+      },
     }
-  </script>
+</script>
+
   
   <style scoped>
 
