@@ -14,9 +14,6 @@
                 <div id="statusColorContainer">
                     <div id="statusColor" :style="{ backgroundColor: statusColor, boxShadow: boxShadowStatus }"></div>
                 </div>
-                <div id="statusColorContainer">
-                    <div id="statusColor" :style="{ backgroundColor: statusColor, boxShadow: boxShadowStatus }"></div>
-                </div>
             </div>
             <div id="clock">
                 <button id="clock" @click="clockChange()">
@@ -108,7 +105,7 @@ h1 {
     padding-top: 5px;
     border-radius: 20px;
     margin-top: 0px;
-    margin-right: 10vw;
+    margin-right: 20px;
     align-items: center;
     justify-content: center;
     left: 0;
@@ -117,6 +114,11 @@ h1 {
     transition: .5s;
     text-align: center;
     font-family: 'Outfit', sans-serif;
+    transition: box-shadow 0.5s ease-in-out;
+}
+
+#datetime:hover{
+    box-shadow: 4px 9px 24px 0px #9C9C9C;
 }
 
 #timePassedStyle {
@@ -137,7 +139,7 @@ h1 {
 }
 
 #row-group {
-    width: 50%;
+    width: 78%;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -145,6 +147,7 @@ h1 {
     border: 1px solid #c0c0c0;
     border-radius: 20px;
     transition: box-shadow 0.5s ease-in-out;
+    background-color: white;
 }
 
 #row-group:hover {
