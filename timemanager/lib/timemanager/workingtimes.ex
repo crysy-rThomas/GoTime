@@ -103,6 +103,8 @@ defmodule Timemanager.Workingtimes do
   end
 
   def get_working_from_user(id) do
+    IO.inspect("------------User found5----------------")
+    IO.inspect(id)
     from(c in Workingtime, where: c.user == ^id) |> Repo.all()
   end
 end

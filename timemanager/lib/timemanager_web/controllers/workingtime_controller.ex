@@ -4,6 +4,8 @@ defmodule TimemanagerWeb.WorkingtimeController do
   alias Timemanager.Workingtimes
   alias Timemanager.Workingtimes.Workingtime
 
+  alias Timemanager.Users
+
   action_fallback TimemanagerWeb.FallbackController
 
   def index(conn, _params) do
@@ -42,13 +44,18 @@ defmodule TimemanagerWeb.WorkingtimeController do
   end
 
   def show_working_from_user_id(conn, %{"id" => id}) do
+    IO.inspect("------------User found1----------------")
     client = Users.get_user(id)
+    IO.inspect("------------User found2----------------")
     case client do
       {:ok, _} ->
-        clocks = Workingtime.get_working_from_user(id)
+        IO.inspect("------------User found3----------------")
+        IO.inspect(id)
+        workingtime = Workingtimes.get_working_from_user(id)
+        IO.inspect("------------User found4----------------")
         conn
         |> put_status(:ok)
-        |> render(:index, clocks: clocks)
+        |> render(:index, workingtimes: workingtime)
       {:error, _reason} ->
         conn
         |> put_status(:ok)
