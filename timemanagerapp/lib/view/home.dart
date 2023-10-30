@@ -25,6 +25,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   double maxheight = 15;
+  List<UserModel> myEmployees = [];
+
   final style = const TextStyle(
     fontSize: 10,
     fontWeight: FontWeight.bold,
@@ -75,6 +77,34 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  getEmployees() async {
+    int? myId = int.tryParse(
+        await (const FlutterSecureStorage()).read(key: 'id') ?? "-1");
+    if (myId == null) {
+      showSnackBar("You are not logged in", isError: true);
+      return;
+    }
+    UserModel? user = await UserService().getUser(myId);
+    if (user == null) {
+      showSnackBar("You are not logged in", isError: true);
+      return;
+    }
+    final List<UserModel> employees = (await UserService().getAllUsers())
+        .where((element) => element.role > user.role)
+        .toList();
+    user.firstname = "Me";
+    user.lastname = "";
+    setState(() {
+      myEmployees = [user, ...employees];
+    });
+  }
+
+  @override
+  void initState() {
+    getEmployees();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -88,20 +118,39 @@ class _HomePageState extends State<HomePage> {
         List<ClockModel> clocks = snapshot.data!;
         return Scaffold(
           backgroundColor: Colors.black,
+          drawer: Drawer(
+            child: ListView.builder(
+              shrinkWrap: false,
+              itemCount: myEmployees.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  onTap: () {},
+                  title: Text(
+                    "${myEmployees[index].firstname} ${myEmployees[index].lastname}",
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 23,
+                    ),
+                  ),
+                  subtitle: Text(
+                    "Role: ${myEmployees[index].role}",
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
           appBar: AppBar(
             backgroundColor: Colors.black,
             elevation: 0,
-            leading: const Padding(
+            title: const Padding(
               padding: EdgeInsets.only(left: 16.0),
               child: Image(
                 image: AssetImage("assets/logo_white.png"),
-              ),
-            ),
-            title: const Text(
-              "Home",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 23,
+                height: 50,
               ),
             ),
             centerTitle: true,
@@ -119,8 +168,8 @@ class _HomePageState extends State<HomePage> {
           ),
           floatingActionButton: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              onPressed: () async {
+            child: GestureDetector(
+              onTap: () async {
                 int? myId = int.tryParse(
                     await (const FlutterSecureStorage()).read(key: 'id') ??
                         "-1");
@@ -135,16 +184,24 @@ class _HomePageState extends State<HomePage> {
                 );
                 setState(() {});
               },
-              style: ElevatedButton.styleFrom(
-                primary: (clocks.length % 2 == 0) ? Colors.white : Colors.red,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-              ),
-              child: const Image(
-                image: AssetImage("assets/clock.gif"),
-                height: 80,
+              child: Stack(
+                children: [
+                  const Image(
+                    image: AssetImage("assets/clock.gif"),
+                    height: 100,
+                  ),
+                  Positioned(
+                    top: 30,
+                    left: (clocks.length % 2 == 0) ? 60 : 50,
+                    child: Text(
+                      (clocks.length % 2 == 0) ? "Clock in" : "Clock out",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 23,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -153,6 +210,18 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                SizedBox(
+                  height: 32,
+                  width: size.width,
+                ),
+                Text(
+                  (clocks.length % 2 != 0) ? "Working" : "Not working",
+                  style: TextStyle(
+                    color: (clocks.length % 2 != 0) ? Colors.red : Colors.white,
+                    fontSize: 23,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 SizedBox(
                   height: 32,
                   width: size.width,
@@ -193,7 +262,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         child: LineChart(
                           LineChartData(
-                            lineTouchData: const LineTouchData(enabled: true),
+                            lineTouchData: const LineTouchData(enabled: false),
                             lineBarsData: [
                               LineChartBarData(
                                 spots: const [

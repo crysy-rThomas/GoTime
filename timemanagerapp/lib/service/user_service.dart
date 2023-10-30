@@ -28,8 +28,6 @@ class UserService {
           data: error.response?.data ?? {},
         );
       });
-      print(res.statusCode);
-      print(res.data);
       if (res.statusCode != 200) {
         return [];
       }

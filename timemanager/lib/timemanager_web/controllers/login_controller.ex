@@ -14,7 +14,7 @@ defmodule TimemanagerWeb.LoginController do
           conn
           |> put_status(:ok)
           |> put_resp_header("location", ~p"/api/users/#{user}")
-          |> render(:login, token: token)
+          |> render(:login, token: token, id: user.id)
 
         {:error, _reason} ->
           conn

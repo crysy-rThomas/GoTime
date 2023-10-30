@@ -15,7 +15,7 @@ class ClockService {
     try {
       final res = await Dio()
           .get(
-        'https://timemanager-epitech-mpl.gigalixirapp.com/api/clock/user/$myId',
+        'https://timemanager-epitech-mpl.gigalixirapp.com/api/clocks/user/$myId',
         options: Options(
           headers: {
             "Authorization": "Bearer $token",
@@ -53,7 +53,7 @@ class ClockService {
     try {
       final res = await Dio()
           .post(
-        'https://timemanager-epitech-mpl.gigalixirapp.com/api/clock',
+        'https://timemanager-epitech-mpl.gigalixirapp.com/api/clocks',
         data: {
           "clock": {
             "status": status,
@@ -75,6 +75,8 @@ class ClockService {
           data: error.response?.data ?? {},
         );
       });
+      print(res.statusCode);
+      print(res.data);
       if (res.statusCode != 200) {
         return "Error while clocking";
       }
