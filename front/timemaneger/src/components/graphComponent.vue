@@ -18,7 +18,7 @@ export default {
       labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "saturday"],
       datasets: [
         {
-          label: "# of Votes",
+          label: "number of hours",
           data: [9, 9, 7, 10, 9.30, 8],
         },
       ],

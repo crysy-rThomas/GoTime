@@ -1,6 +1,8 @@
 <template>
     <div id="customClock">
-
+        <h2>Custom Clock</h2>
+        <form>
+        </form>
     </div>
 </template>
 
@@ -19,5 +21,9 @@
 
     #customClock:hover{
         box-shadow: 4px 9px 24px 0px #9C9C9C;
+    }
+
+    h2,div,p{
+        text-align: center;
     }
 </style>
