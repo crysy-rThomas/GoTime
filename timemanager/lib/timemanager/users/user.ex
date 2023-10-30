@@ -23,16 +23,13 @@ defmodule Timemanager.Users.User do
   end
 
   defp hash_password(changeset) do
-    IO.inspect(get_change(changeset, :password), label: "Before hash_password")
     case get_change(changeset, :password) do
       nil ->
         changeset
       password ->
           hash = Bcrypt.hash_pwd_salt(password,[log_rounds: 12])
-          IO.inspect(hash, label: "Hash")
           put_change(changeset, :password, hash)
     end |> (fn changeset ->
-      IO.inspect(get_change(changeset, :password), label: "After hash_password")
       changeset
     end).()
   end
