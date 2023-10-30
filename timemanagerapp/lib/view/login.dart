@@ -34,12 +34,13 @@ class _LoginScreenState extends State<LoginScreen> {
   bool signup = false;
   String? email;
 
-  login(Function goToNext, Function(String) error) async {
+  login(Function goToNext, Function(String) error, String emailSent,
+      String passwordSent) async {
     setState(() {
       loading = true;
     });
     final Tuple2<bool, String> user =
-        await Authentification().signIn(email!, textController.text);
+        await Authentification().signIn(emailSent, passwordSent);
     setState(() {
       loading = false;
     });
@@ -425,6 +426,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           (String error) {
                                             showSnackBar(error, isError: true);
                                           },
+                                          email!,
+                                          textController.text,
                                         );
                                       } else {
                                         showSnackBar(
@@ -473,14 +476,32 @@ class _LoginScreenState extends State<LoginScreen> {
                                 if (faceId)
                                   GestureDetector(
                                     onTap: () async {
+                                      String? emailSent =
+                                          await storage.read(key: 'email');
+                                      String? passwordSent =
+                                          await storage.read(key: 'password');
+                                      if (emailSent == null ||
+                                          passwordSent == null) {
+                                        showSnackBar(
+                                          "Veuillez vous (re)connecter",
+                                          isError: true,
+                                        );
+                                        return;
+                                      }
                                       faceIdFunct(
                                         () async {
-                                          await (const FlutterSecureStorage())
-                                              .write(
-                                                  key: 'loggedIn',
-                                                  value: "true");
-                                          Navigator.pushReplacementNamed(
-                                              context, '/home');
+                                          login(
+                                            () {
+                                              Navigator.pushReplacementNamed(
+                                                  context, '/home');
+                                            },
+                                            (String error) {
+                                              showSnackBar(error,
+                                                  isError: true);
+                                            },
+                                            emailSent,
+                                            passwordSent,
+                                          );
                                         },
                                       );
                                     },

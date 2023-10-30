@@ -25,7 +25,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   double maxheight = 15;
+  int? selected;
+  bool loading = false;
   List<UserModel> myEmployees = [];
+  final TextEditingController firstnameController = TextEditingController();
+  final TextEditingController lastnameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  int userRole = 3;
 
   final style = const TextStyle(
     fontSize: 10,
@@ -108,6 +115,244 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
+    if (selected == -1) {
+      return Scaffold(
+        backgroundColor: Colors.black,
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          elevation: 0,
+          leading: const Padding(
+            padding: EdgeInsets.only(left: 16.0),
+            child: Image(
+              image: AssetImage("assets/logo_white.png"),
+              height: 50,
+            ),
+          ),
+          title: const Padding(
+            padding: EdgeInsets.only(left: 16.0),
+            child: Text(
+              "Add hero",
+            ),
+          ),
+          centerTitle: true,
+          actions: [
+            IconButton(
+              onPressed: () async {
+                Navigator.pushNamed(context, '/settings');
+              },
+              icon: const Icon(
+                Icons.settings,
+                color: Colors.white,
+              ),
+            ),
+          ],
+        ),
+        body: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: const Color.fromRGBO(248, 249, 250, 1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: TextField(
+                  controller: firstnameController,
+                  obscureText: false,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "Prénom",
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            const SizedBox(height: 32),
+            Container(
+              decoration: BoxDecoration(
+                color: const Color.fromRGBO(248, 249, 250, 1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: TextField(
+                  controller: lastnameController,
+                  obscureText: false,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "Nom",
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            const SizedBox(height: 32),
+            Container(
+              decoration: BoxDecoration(
+                color: const Color.fromRGBO(248, 249, 250, 1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: TextField(
+                  controller: emailController,
+                  obscureText: false,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "Email",
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            const SizedBox(height: 32),
+            Container(
+              decoration: BoxDecoration(
+                color: const Color.fromRGBO(248, 249, 250, 1),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: TextField(
+                  controller: passwordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "Mot de passe",
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            const SizedBox(height: 32),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(248, 249, 250, 1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: DropdownButton<int>(
+                  value: userRole,
+                  isExpanded: true,
+                  elevation: 16,
+                  hint: const Padding(
+                    padding: EdgeInsets.only(left: 8.0),
+                    child: Center(
+                      child: Text(
+                        "Choose a role",
+                      ),
+                    ),
+                  ),
+                  onChanged: (int? newValue) {
+                    setState(() {
+                      userRole = newValue ?? 3;
+                    });
+                  },
+                  items: [
+                    {"id": 1, "name": "General Manager"},
+                    {"id": 2, "name": "Manager"},
+                    {"id": 3, "name": "User"},
+                  ].map<DropdownMenuItem<int>>((Map<String, dynamic> value) {
+                    return DropdownMenuItem<int>(
+                      value: value["id"] as int,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 8.0),
+                        child: Center(
+                          child: Text(
+                            value['name'] ?? '',
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ),
+            const SizedBox(height: 32),
+            GestureDetector(
+              onTap: () {
+                if (firstnameController.text.isEmpty) {
+                  showSnackBar("Please enter your firstname", isError: true);
+                  return;
+                }
+                if (lastnameController.text.isEmpty) {
+                  showSnackBar("Please enter your lastname", isError: true);
+                  return;
+                }
+                if (emailController.text.isEmpty) {
+                  showSnackBar("Please enter your email", isError: true);
+                  return;
+                }
+                if (passwordController.text.isEmpty) {
+                  showSnackBar("Please enter your password", isError: true);
+                  return;
+                }
+                setState(() {
+                  loading = true;
+                });
+                Authentification()
+                    .signUp(
+                        emailController.text,
+                        passwordController.text,
+                        firstnameController.text,
+                        lastnameController.text,
+                        userRole)
+                    .then(
+                  (value) {
+                    setState(() {
+                      loading = false;
+                    });
+                    if (value) {
+                      showSnackBar("Account created");
+                      getEmployees();
+                      setState(() {
+                        emailController.clear();
+                        passwordController.clear();
+                        firstnameController.clear();
+                        lastnameController.clear();
+                        userRole = 3;
+                        selected = null;
+                      });
+                    } else {
+                      showSnackBar("Error while signing up", isError: true);
+                    }
+                  },
+                );
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(101, 126, 233, 1),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: loading
+                            ? const Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : const Text(
+                                "Créer un compte",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
     return FutureBuilder<List<ClockModel>>(
       future: ClockService().getMyClocks(),
       builder: (context, snapshot) {
@@ -116,31 +361,94 @@ class _HomePageState extends State<HomePage> {
           return const LoadingScreen();
         }
         List<ClockModel> clocks = snapshot.data!;
+        print(clocks);
+        List<Widget> widgets = [
+          ...myEmployees
+              .map((e) => ListTile(
+                    onTap: () {
+                      setState(() {
+                        selected = e.id;
+                      });
+                    },
+                    title: Text(
+                      "${e.firstname} ${e.lastname}",
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 23,
+                      ),
+                    ),
+                    subtitle: Text(
+                      "Role: ${e.role}",
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ))
+              .toList()
+        ];
         return Scaffold(
           backgroundColor: Colors.black,
           drawer: Drawer(
-            child: ListView.builder(
-              shrinkWrap: false,
-              itemCount: myEmployees.length,
-              itemBuilder: (context, index) {
-                return ListTile(
-                  onTap: () {},
-                  title: Text(
-                    "${myEmployees[index].firstname} ${myEmployees[index].lastname}",
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 23,
+            child: SizedBox(
+              height: 300,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: [
+                      const SizedBox(
+                        height: 50,
+                      ),
+                      ...widgets,
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 50.0),
+                    child: GestureDetector(
+                      onTap: () async {
+                        setState(() {
+                          selected = -1;
+                        });
+                        Navigator.pop(context);
+                      },
+                      child: Stack(
+                        children: [
+                          Image.asset("assets/justice-league.png"),
+                          Positioned(
+                            top: 75,
+                            left: size.width * 0.3,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.white.withOpacity(0.9),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 5),
+                                  ),
+                                ],
+                              ),
+                              child: const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  "Add hero",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                  subtitle: Text(
-                    "Role: ${myEmployees[index].role}",
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                    ),
-                  ),
-                );
-              },
+                ],
+              ),
             ),
           ),
           appBar: AppBar(
@@ -166,43 +474,25 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-          floatingActionButton: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: GestureDetector(
-              onTap: () async {
-                int? myId = int.tryParse(
-                    await (const FlutterSecureStorage()).read(key: 'id') ??
-                        "-1");
-                if (myId == null) {
-                  showSnackBar("You are not logged in", isError: true);
-                  return;
-                }
-                await ClockService().clockInOrOut(
-                  myId,
-                  (clocks.length % 2 == 0),
-                  "Clock ${(clocks.length % 2 == 0) ? "in" : "out"} at ${DateFormat("yyyy-mm-dd hh:mm").format(DateTime.now())}",
-                );
-                setState(() {});
-              },
-              child: Stack(
-                children: [
-                  const Image(
-                    image: AssetImage("assets/clock.gif"),
-                    height: 100,
-                  ),
-                  Positioned(
-                    top: 30,
-                    left: (clocks.length % 2 == 0) ? 60 : 50,
-                    child: Text(
-                      (clocks.length % 2 == 0) ? "Clock in" : "Clock out",
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 23,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async {
+              int? myId = int.tryParse(
+                  await (const FlutterSecureStorage()).read(key: 'id') ?? "-1");
+              if (myId == null) {
+                showSnackBar("You are not logged in", isError: true);
+                return;
+              }
+              await ClockService().clockInOrOut(
+                myId,
+                (clocks.length % 2 == 0),
+                "Clock ${(clocks.length % 2 == 0) ? "in" : "out"} at ${DateFormat("yyyy-mm-dd hh:mm").format(DateTime.now())}",
+              );
+              setState(() {});
+            },
+            backgroundColor: Colors.white,
+            child: Icon(
+              (clocks.length % 2 == 0) ? Icons.timer : Icons.timer_off,
+              color: Colors.black,
             ),
           ),
           body: SingleChildScrollView(
@@ -307,14 +597,6 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                             ],
-                            // betweenBarsData: [
-                            //   BetweenBarsData(
-                            //     fromIndex: 0,
-                            //     toIndex: 1,
-                            //     color: Colors.red,
-                            //   ),
-                            // ],
-
                             minY: 0,
                             maxY: maxheight,
                             borderData: FlBorderData(

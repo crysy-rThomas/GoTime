@@ -36,6 +36,8 @@ class Authentification {
       storage.write(key: 'access_token', value: res.data['data']['token']);
       storage.write(key: 'loggedIn', value: "true");
       storage.write(key: 'id', value: res.data['data']['id'].toString());
+      storage.write(key: 'email', value: email);
+      storage.write(key: 'password', value: password);
       return const Tuple2(true, "");
     } catch (e) {
       if (kDebugMode) {
