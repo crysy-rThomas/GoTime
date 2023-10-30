@@ -5,7 +5,6 @@ defmodule Timemanager.Users do
 
   import Ecto.Query, warn: false
   alias Timemanager.Repo
-
   alias Timemanager.Users.User
 
   @doc """
@@ -62,6 +61,7 @@ defmodule Timemanager.Users do
     |> Repo.insert()
   end
 
+
   @doc """
   Updates a user.
 
@@ -111,14 +111,17 @@ defmodule Timemanager.Users do
 
   def authenticate_user(email, password) do
     user = Repo.get_by(User, email: email)
-    if (user != nil) do
-      if (user.password == password) do
-        {:ok, user}
-      else
-        {:error, "Wrong password"}
-      end
-    else
-      {:error, "User not found"}
+
+    case user do
+      nil ->
+        {:error, "User not found"}
+      %User{password: password_hash} ->
+        case Bcrypt.verify_pass(password, password_hash) do
+          true ->
+            {:ok, user}
+          false ->
+            {:error, "Incorrect password"}
+        end
     end
   end
 end
