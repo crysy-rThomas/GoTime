@@ -124,4 +124,11 @@ defmodule Timemanager.Users do
         end
     end
   end
+
+  def get_user_by_email(email) do
+    IO.inspect(email)
+    Repo.get_by(User, email: email)
+  end
+
+
 end

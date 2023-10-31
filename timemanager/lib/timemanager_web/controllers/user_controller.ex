@@ -4,6 +4,11 @@ defmodule TimemanagerWeb.UserController do
   alias Timemanager.Users
   alias Timemanager.Users.User
 
+  # plug(Timemanager.Permissions, :check_permissions)
+
+
+
+
   action_fallback(TimemanagerWeb.FallbackController)
 
     def index(conn, _params) do
@@ -13,12 +18,21 @@ defmodule TimemanagerWeb.UserController do
 
 
   def create(conn, %{"user" => user_params}) do
-        with {:ok, %User{} = user} <- Users.create_user(user_params) do
+        check_email_is_used = Users.get_user_by_email(user_params["email"])
+        case check_email_is_used do
+          nil ->
+            with {:ok, %User{} = user} <- Users.create_user(user_params) do
+              conn
+              |> put_status(:created)
+              |> put_resp_header("location", ~p"/api/users/#{user}")
+              |> render(:show, user: user)
+            end
+          _ ->
           conn
-          |> put_status(:created)
-          |> put_resp_header("location", ~p"/api/users/#{user}")
-          |> render(:show, user: user)
+          |> put_status(:ok)
+          |> render(:error, error: "Email is already used")
         end
+
   end
 
   def show(conn, %{"id" => id}) do
