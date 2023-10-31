@@ -29,7 +29,6 @@ class ClockService {
           data: error.response?.data ?? {},
         );
       });
-      print(res.data);
       if (res.statusCode != 200) {
         return [];
       }
@@ -99,7 +98,7 @@ class ClockService {
             "status": status,
             "description": description,
             "user": id,
-            "time": DateFormat("yyyy-MM-dd hh:mm").format(DateTime.now())
+            "time": DateFormat("yyyy-MM-dd HH:mm").format(DateTime.now()),
           }
         },
         options: Options(
@@ -115,8 +114,6 @@ class ClockService {
           data: error.response?.data ?? {},
         );
       });
-      print(res.statusCode);
-      print(res.data);
       if (res.statusCode != 200) {
         return "Error while clocking";
       }

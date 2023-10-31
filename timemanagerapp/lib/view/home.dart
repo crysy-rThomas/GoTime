@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -8,13 +10,16 @@ import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:intl/intl.dart';
 import 'package:timemanagerapp/model/clock_model.dart';
 import 'package:timemanagerapp/model/user_model.dart';
+import 'package:timemanagerapp/model/working_model.dart';
 import 'package:timemanagerapp/service/authentification.dart';
 import 'package:timemanagerapp/service/clock_service.dart';
 import 'package:timemanagerapp/service/user_service.dart';
+import 'package:timemanagerapp/service/working_service.dart';
 import 'package:timemanagerapp/utils/loading_screen.dart';
 import 'package:timemanagerapp/utils/number_utils.dart';
 import 'package:get/get.dart';
 import 'package:timemanagerapp/utils/show_snack_bar.dart';
+import 'package:tuple/tuple.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -104,6 +109,50 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       myEmployees = [user, ...employees];
     });
+  }
+
+  Future<Tuple2<List<ClockModel>, List<WorkingModel>>>
+      getClocksAndWorking() async {
+    List<ClockModel> clocks = await ClockService().getMyClocks();
+    List<WorkingModel> workings = await WorkingService().getMyWorkingTimes();
+    return Tuple2(clocks, workings);
+  }
+
+  List<FlSpot> getWorkingTimesData() {
+    List<FlSpot> spots = [];
+    DateTime now = DateTime.now();
+    for (int i = 0; i < 7; i++) {
+      DateTime day = now.subtract(Duration(days: i));
+      List<WorkingModel> workings = [];
+      for (var working in workings) {
+        if (working.startTime.day == day.day &&
+            working.startTime.month == day.month &&
+            working.startTime.year == day.year) {
+          workings.add(working);
+        }
+      }
+      double total = 0;
+      for (var working in workings) {
+        total += working.endTime.difference(working.startTime).inHours;
+      }
+      spots[i] = FlSpot(i.toDouble(), total);
+    }
+
+    return spots;
+  }
+
+  List<FlSpot> getClockedData() {
+    List<FlSpot> spots = const [
+      FlSpot(0, 9),
+      FlSpot(1, 2),
+      FlSpot(2, 7),
+      FlSpot(3, 9),
+      FlSpot(4, 2),
+      FlSpot(5, 2),
+      FlSpot(6, 2),
+    ];
+
+    return spots;
   }
 
   @override
@@ -353,15 +402,15 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     }
-    return FutureBuilder<List<ClockModel>>(
-      future: ClockService().getMyClocks(),
+    return FutureBuilder<Tuple2<List<ClockModel>, List<WorkingModel>>>(
+      future: getClocksAndWorking(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting ||
             snapshot.data == null) {
           return const LoadingScreen();
         }
-        List<ClockModel> clocks = snapshot.data!;
-        print(clocks);
+        List<ClockModel> clocks = snapshot.data!.item1;
+        List<WorkingModel> workings = snapshot.data!.item2;
         List<Widget> widgets = [
           ...myEmployees
               .map((e) => ListTile(
@@ -387,6 +436,7 @@ class _HomePageState extends State<HomePage> {
                   ))
               .toList()
         ];
+        const working = getWorkingTimesData();
         return Scaffold(
           backgroundColor: Colors.black,
           drawer: Drawer(
@@ -555,15 +605,7 @@ class _HomePageState extends State<HomePage> {
                             lineTouchData: const LineTouchData(enabled: false),
                             lineBarsData: [
                               LineChartBarData(
-                                spots: const [
-                                  FlSpot(0, 7),
-                                  FlSpot(1, 9),
-                                  FlSpot(2, 4),
-                                  FlSpot(3, 6),
-                                  FlSpot(4, 7),
-                                  FlSpot(5, 0),
-                                  FlSpot(6, 0),
-                                ],
+                                spots: ,
                                 isCurved: true,
                                 barWidth: 2,
                                 color: Colors.red,
@@ -576,15 +618,7 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               LineChartBarData(
-                                spots: const [
-                                  FlSpot(0, 9),
-                                  FlSpot(1, 2),
-                                  FlSpot(2, 7),
-                                  FlSpot(3, 9),
-                                  FlSpot(4, 2),
-                                  FlSpot(5, 2),
-                                  FlSpot(6, 2),
-                                ],
+                                spots: getClockedData(),
                                 isCurved: true,
                                 barWidth: 2,
                                 color: Colors.green,

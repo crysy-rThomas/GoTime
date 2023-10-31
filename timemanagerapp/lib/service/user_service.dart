@@ -10,7 +10,6 @@ class UserService {
   Future<List<UserModel>> getAllUsers() async {
     const FlutterSecureStorage storage = FlutterSecureStorage();
     final String? token = await storage.read(key: 'access_token');
-    print(token);
     try {
       final res = await Dio()
           .get(
@@ -50,7 +49,6 @@ class UserService {
     const FlutterSecureStorage storage = FlutterSecureStorage();
     final String? token = await storage.read(key: 'access_token');
     try {
-      print(id);
       final res = await Dio()
           .get(
         'https://timemanager-epitech-mpl.gigalixirapp.com/api/users/$id',
@@ -67,8 +65,6 @@ class UserService {
           data: error.response?.data ?? {},
         );
       });
-      print(res.statusCode);
-      print(res.data);
       if (res.statusCode != 200) {
         return null;
       }

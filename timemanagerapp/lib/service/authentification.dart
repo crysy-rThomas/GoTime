@@ -71,8 +71,6 @@ class Authentification {
           data: error.response?.data ?? {},
         );
       });
-      print(res.statusCode);
-      print(res.data);
       if (res.statusCode != 201) {
         storage.delete(key: 'refresh_token');
         return false;
