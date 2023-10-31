@@ -1,11 +1,38 @@
 <template>
     <div id="customClock">
+        <h2 style="color: #3464B5">Custom Clock</h2>
+        <form>
+            <input ref="dateTimeInput1" style="margin-bottom: 15px;"
+            class="input"
+            type="datetime-local"
+            id="meeting-time-1"
+            name="start-time-1"/> <br>
 
+            <input ref="dateTimeInput2"
+            class="input"
+            type="datetime-local"
+            id="meeting-time-2"
+            name="start-time-2"/>
+            <button id="submit-button" type="submit">Clock</button>
+        </form>
     </div>
 </template>
 
 <script>
+export default {
+    data() {
+        return {
+            currentDateTime: ''
+        };
+    },
+    methods: {
+    },
+}
 </script>
+
+
+
+
 
 <style>
     #customClock{

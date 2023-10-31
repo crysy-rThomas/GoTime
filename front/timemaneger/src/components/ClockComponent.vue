@@ -264,5 +264,4 @@ button:active {
     box-shadow: var(--boxShadowStatus);
 }
 
-#buttonStyle {}
 </style>
