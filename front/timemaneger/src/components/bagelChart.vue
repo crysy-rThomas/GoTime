@@ -1,12 +1,12 @@
 <template>
     <div id="bagelChart">
-
+        <div style="width: 80%; height: 80%; margin-left: 10%; margin-top: 20px;">
+            <Doughnut :data="chartData" :options="options" />
+        </div>
     </div>
 </template>
 
 <script>
-<<<<<<< HEAD
-=======
 import { Doughnut } from 'vue-chartjs';
 
 export default {
@@ -49,11 +49,11 @@ export default {
         //this.$refs.chart.update();
     }
 }
->>>>>>> 9a28de2 (save)
 </script>
 
 <style>
-    #bagelChart{
+    #bagelChart {
+        position: relative;
         height: 430px;
         width: 100%;
         background-color: white;
@@ -62,7 +62,7 @@ export default {
         transition: box-shadow 0.5s ease-in-out;
     }
 
-    #bagelChart:hover{
+    #bagelChart:hover {
         box-shadow: 4px 9px 24px 0px #9C9C9C;
     }
 </style>

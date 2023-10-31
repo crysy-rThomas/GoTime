@@ -30,54 +30,58 @@
   </script>
   
   <style scoped>
-    p{
-      font-family: 'Outfit', sans-serif;
-    }
-    .container{
-      position: relative;
-    }
+  p{
+    font-family: 'Outfit', sans-serif;
+  }
+  .container{
+    position: relative;
+  }
 
-    .icon-grp-item{
-      display: flex;
-      align-items: center;
-      flex-direction: column;
-    }
+  .icon-grp-item{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
 
-    p{
-      margin-top: 0px;
-      font-size: medium;
-      color: rgb(34, 64, 181);
-    }
+  p{
+    margin-top: 0px;
+    font-size: medium;
+    color: rgb(34, 64, 181);
+  }
 
-    #sidebar{
-      position: fixed;
-      height: 100%;
-      background-color: white;
-      width: 100px;
-      box-shadow: 11px 1px 31px -10px #cfcfcf;
-      transition: box-shadow 0.5s ease-in-out;
-    }
+  #sidebar{
+    position: fixed;
+    height: 100%;
+    background-color: white;
+    width: 100px;
+    box-shadow: 11px 1px 31px -10px #cfcfcf;
+    transition: box-shadow 0.5s ease-in-out;
+  }
 
-    #sidebar:hover{
-      box-shadow: 11px 1px 31px -10px #adadad;
-    }
-    .icon{
-      width: 40px;
-      height: auto;
-      fill: rgb(34, 64, 181);
-    }
-    .icon-grp{
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: absolute;
-      margin-left: 10px;
-      top: 40%;
-    }
+  #sidebar:hover{
+    box-shadow: 11px 1px 31px -10px #adadad;
+  }
+  .icon{
+    width: 40px;
+    height: auto;
+    fill: rgb(34, 64, 181);
+  }
+  .icon-grp{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    margin-left: 10px;
+    top: 40%;
+  }
 
-    #small-logo{
-      height: 35px;
-      margin-top: 25px;
-    }
-  </style>
+  #small-logo{
+    height: 35px;
+    margin-top: 25px;
+  }
+
+  svg{
+    margin-left: 15px;
+  }
+</style>
   

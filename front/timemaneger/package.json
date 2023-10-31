@@ -18,6 +18,7 @@
     "postcss-svgo": "^6.0.0",
     "vue": "^3.3.7",
     "vue-chart-3": "^3.1.8",
+    "vue-chartjs": "^5.2.0",
     "vue-loader": "^17.3.0",
     "vue-router": "^4.2.5",
     "vuex": "^4.1.0",
