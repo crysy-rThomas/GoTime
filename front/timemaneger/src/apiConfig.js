@@ -1,7 +1,8 @@
-export const BASE_URL_GEOCONFIG = 'http://api.openweathermap.org/geo/1.0';
-export const BASE_URL_FORECAST = 'https://api.openweathermap.org/data/2.5';
-export const API_KEY = '577f10332cf8fafdcaa300045909e87e';
+export const BASE_URL_GEOCONFIG = "http://api.openweathermap.org/geo/1.0";
+export const BASE_URL_FORECAST = "https://api.openweathermap.org/data/2.5";
+export const API_KEY = "577f10332cf8fafdcaa300045909e87e";
 
-
-export const BASE_URL = 'https://timemanager-epitech-mpl.gigalixirapp.com/api'
-export var JWT_TOKEN = ''
+export const BASE_URL_REGISTER =
+  "https://timemanager-epitech-mpl.gigalixirapp.com/";
+export const BASE_URL = "https://timemanager-epitech-mpl.gigalixirapp.com/api";
+export var JWT_TOKEN = "";
