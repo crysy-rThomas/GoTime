@@ -16,10 +16,6 @@ defmodule Timemanager.Tokens do
     check_token(conn)
   end
 
-  def change_token(%Token{} = token, attrs \\ %{}) do
-    Token.changeset(token, attrs)
-  end
-
   def from_request(conn) do
     case Tokens.get_req_header(conn, "authorization") do
       nil -> nil
@@ -47,7 +43,7 @@ defmodule Timemanager.Tokens do
         case decoded_token do
           {:ok, decoded_token} ->
             check_token_age(decoded_token, conn)
-            user = Users.get_user(newToken["user_id"])
+            user = Users.get_user(decoded_token["user_id"])
             case user do
               {:ok, user}
               ->
@@ -69,19 +65,22 @@ defmodule Timemanager.Tokens do
 
 
   defp check_token_age(token, conn) do
-    token_age = token["age"]
-    case token_age do
-      token_age ->
-        age_in_minutes = DateTime.diff(DateTime.utc_now(), token_age, :minute)
-        if (age_in_minutes > 240) do
-            unauth(conn,"Token to old")
-        else
-            {:ok, token_age}
-        end
-      nil ->
-        {:error, "Token invalid"}
+    if !token["phone"] do
+      token_age = token["age"]
+      case token_age do
+        token_age ->
+          age_in_minutes = DateTime.diff(DateTime.utc_now(), token_age, :minute)
+          if (age_in_minutes > 240) do
+              unauth(conn,"Token to old")
+          else
+              {:ok, token_age}
+          end
+        nil ->
+          {:error, "Token invalid"}
+      end
+    else
+      {:ok, token}
     end
-
   end
 
 
