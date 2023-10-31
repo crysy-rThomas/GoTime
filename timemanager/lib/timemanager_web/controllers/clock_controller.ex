@@ -65,4 +65,21 @@ defmodule TimemanagerWeb.ClockController do
       send_resp(conn, :no_content, "")
     end
   end
+
+  def get_last_clock(conn, %{"id" => id}) do
+    client = Users.get_user(id)
+
+    case client do
+      {:ok, _} ->
+        clocks = Clocks.get_last_clock_from_user_id(id)
+        conn
+        |> put_status(:ok)
+        |> render(:index, clocks: clocks)
+      {:error, _reason} ->
+        conn
+        |> put_status(:ok)
+        |> render(:error, error: "Could not find user with id #{id}")
+    end
+  end
+
 end

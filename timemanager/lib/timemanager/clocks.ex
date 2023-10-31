@@ -102,6 +102,14 @@ defmodule Timemanager.Clocks do
     Clock.changeset(clock, attrs)
   end
 
+
+  def get_last_clock_from_user_id(id) do
+    get_date_from_clocks = (from(c in Clock, where: c.user == ^id) |> Repo.all())
+    |> Enum.sort_by(& &1.time)
+    |> Enum.reverse()
+    |> Enum.take(1)
+  end
+
   def get_clocks_from_user(id) do
     from(c in Clock, where: c.user == ^id) |> Repo.all()
   end
