@@ -9,10 +9,11 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:timemanagerapp/model/working_model.dart';
 
 class WorkingService {
-  Future<List<WorkingModel>> getMyWorkingTimes() async {
+  Future<List<WorkingModel>> getMyWorkingTimes(int? id) async {
     const FlutterSecureStorage storage = FlutterSecureStorage();
     final String? token = await storage.read(key: 'access_token');
-    int? myId = int.tryParse(await storage.read(key: 'id') ?? "-1");
+    int? myId = id;
+    myId ??= int.tryParse(await storage.read(key: 'id') ?? "-1");
     try {
       final res = await Dio()
           .get(

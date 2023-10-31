@@ -8,49 +8,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ClockService {
-  Future<List<ClockModel>> getMyClocks() async {
+  Future<List<ClockModel>> getMyClocks(int? id) async {
+    log(id.toString());
     const FlutterSecureStorage storage = FlutterSecureStorage();
     final String? token = await storage.read(key: 'access_token');
-    int? myId = int.tryParse(await storage.read(key: 'id') ?? "-1");
-    try {
-      final res = await Dio()
-          .get(
-        'https://timemanager-epitech-mpl.gigalixirapp.com/api/clock/user/$myId',
-        options: Options(
-          headers: {
-            "Authorization": "Bearer $token",
-          },
-        ),
-      )
-          .onError((DioError error, stackTrace) async {
-        return Response(
-          requestOptions: RequestOptions(path: ''),
-          statusCode: error.response?.statusCode ?? 0,
-          data: error.response?.data ?? {},
-        );
-      });
-      if (res.statusCode != 200) {
-        return [];
-      }
-      List<ClockModel> clocks = [];
-      for (var clock in res.data['data']) {
-        clocks.add(ClockModel.fromJson(clock));
-      }
-
-      return clocks;
-    } catch (e) {
-      if (kDebugMode) {
-        log("getAllClocks");
-        log(e.toString());
-      }
-      return [];
-    }
-  }
-
-  Future<List<ClockModel>> getMyClocksAndWorking() async {
-    const FlutterSecureStorage storage = FlutterSecureStorage();
-    final String? token = await storage.read(key: 'access_token');
-    int? myId = int.tryParse(await storage.read(key: 'id') ?? "-1");
+    int? myId = id;
+    myId ??= int.tryParse(await storage.read(key: 'id') ?? "-1");
     try {
       final res = await Dio()
           .get(
