@@ -11,6 +11,8 @@ defmodule Timemanager.UsersFixtures do
     {:ok, user} =
       attrs
       |> Enum.into(%{
+        first_name: "some first_name",
+        last_name: "some last_name"
         firstname: "some firstname",
         lastname: "some lastname"
       })

@@ -54,7 +54,9 @@ defmodule Timemanager.MixProject do
       {:ex_doc, "~> 0.21", only: :dev, runtime: false},
       {:cors_plug, "~> 3.0"},
       {:comeonin, "~> 5.4"},
-      {:bcrypt_elixir, "~> 3.1"}
+      {:bcrypt_elixir, "~> 3.1"},
+      {:pow, "~> 1.0"},
+      {:joken, "~> 2.2"}
     ]
   end
 

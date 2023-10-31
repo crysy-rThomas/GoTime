@@ -11,6 +11,9 @@
             </div>
             <div id="status">
                 <h1>{{ title }}</h1>
+                <div id="statusColorContainer">
+                    <div id="statusColor" :style="{ backgroundColor: statusColor, boxShadow: boxShadowStatus }"></div>
+                </div>
             </div>
             <div id="clock">
                 <button id="clock" @click="clockChange()">
@@ -33,9 +36,11 @@ export default {
         return {
             time: moment().format("HH:mm"),
             date: moment().format("DD/MM"),
-            timepassed: '',
+            timepassed: '06:10',
             title: '-',
-            clockIn: true
+            clockIn: true,
+            statusColor: '#34a300',
+            boxShadowStatus: '0px 0px 45px 5px #34a300'
         }
     },
     methods: {
@@ -43,8 +48,12 @@ export default {
             this.clockIn = !this.clockIn;
             if (!this.clockIn) {
                 this.title = 'Present';
+                this.statusColor = '#34a300';
+                this.boxShadowStatus = '0px 0px 45px 5px #34a300';
             } else {
                 this.title = 'Absent';
+                this.statusColor = '#aa0000';
+                this.boxShadowStatus = '0px 0px 45px 5px #aa0000';
             }
         }
     },
@@ -79,15 +88,24 @@ h1 {
 }
 
 #status {
-    width: 115px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 150px;
     height: 85px;
     color: #5a5a5a;
     margin-right: 20px;
 }
 
 #datetime {
-    width: 170px;
+    background-color: white;
+    border: 1px solid #cecece;
+    padding-bottom: 5px;
+    width: 20%;
+    padding-top: 5px;
+    border-radius: 20px;
     margin-top: 0px;
+    margin-right: 20px;
     align-items: center;
     justify-content: center;
     left: 0;
@@ -96,6 +114,20 @@ h1 {
     transition: .5s;
     text-align: center;
     font-family: 'Outfit', sans-serif;
+    transition: box-shadow 0.5s ease-in-out;
+}
+
+#datetime:hover{
+    box-shadow: 4px 9px 24px 0px #9C9C9C;
+}
+
+#timePassedStyle {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    font-size: 40px;
+    margin-right: 20px;
+    margin-left: 20px;
 }
 
 #timeStyle {
@@ -107,17 +139,25 @@ h1 {
 }
 
 #row-group {
-    width: 50%;
-    /* Adjust the width as needed */
+    width: 78%;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     font-family: 'Outfit', sans-serif;
+    border: 1px solid #c0c0c0;
+    border-radius: 20px;
+    transition: box-shadow 0.5s ease-in-out;
+    background-color: white;
+}
+
+#row-group:hover {
+    box-shadow: 4px 9px 24px 0px #9C9C9C;
 }
 
 button {
     display: flex;
     align-items: center;
+    margin-right: 20px;
     font-family: var(--regular-font);
     font-size: 1rem;
     outline: none;
@@ -146,6 +186,24 @@ button:active {
     transition: transform 100ms ease;
     transform: perspective(1px) translateZ(0) scale(0.8);
     /*  filter: grayscale(60%); */
+}
+
+#statusColorContainer {
+    height: 100%;
+    position: relative;
+}
+
+#statusColor {
+    border-radius: 100%;
+    height: 15px;
+    width: 15px;
+    background-color: var(--statusColor);
+    transition: background-color 0.3s;
+    transition: box-shadow 0.3s;
+    position: absolute;
+    bottom: 39%;
+    margin-left: 20px;
+    box-shadow: var(--boxShadowStatus);
 }
 
 #buttonStyle {}

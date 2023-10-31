@@ -4,11 +4,11 @@ defmodule Timemanager.Users.User do
   import Bcrypt
 
   schema "users" do
-    field(:password, :string)
-    field(:firstname, :string)
-    field(:lastname, :string)
-    field(:email, :string)
-    field(:role, :id)
+    field :firstname, :string
+    field :lastname, :string
+    field :email, :string
+    field :password, :string
+    field :role, :integer
 
     timestamps(type: :utc_datetime)
   end

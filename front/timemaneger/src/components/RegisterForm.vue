@@ -45,7 +45,7 @@
 </template>
 
 <script>
-    import { addUser } from '@/services/userService'; // Update the path accordingly
+    import { addUser } from '@/services/userService';
     export default {
         name: 'RegisterForm',
         data() {
@@ -58,10 +58,8 @@
         },
         methods: {
         async handleSubmit() {
-            console.log("ZEGZEGZEGZEG");
             try {
-                const response = await addUser(this.email, this.firstname, this.lastname, this.password);
-                console.log(response.data);
+                await addUser(this.email, this.firstname, this.lastname, this.password);
             } catch (error) {
                 console.error('Error adding user:', error);
             }
@@ -197,7 +195,9 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
-    background-color: rgb(143, 151, 181);
+    background-color: white;
+    color: rgb(34, 64, 181);
+    border: 2px solid rgb(34, 64, 181);
 }
 
 #main-container {
@@ -225,6 +225,4 @@ input[type="email"]:focus {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     transform: translateY(-2px);
 }
-
-
 </style>
