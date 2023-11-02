@@ -37,6 +37,11 @@
                         <div style="width: 80%; margin: auto;">
                             <input type="submit" value="Register" name="Submit">
                         </div>
+                        <div>
+                            <p style="text-align: center;">Have an account ?
+                                <router-link to="/connexion"><a href="">Login here</a></router-link>
+                            </p>
+                        </div>
                     </form>
                 </div>
             </div>

@@ -32,7 +32,7 @@
 <script>
 import moment from "moment";
 import { mapGetters } from "vuex";
-import { addClock } from "@/services/clockService";
+import { addClock, getLastClockByUserId } from "@/services/clockService";
 export default {
     name: "ClockComponent",
     data() {
@@ -48,6 +48,7 @@ export default {
             beginDate: '',
             endDate: '',
             secondsPassed: '00',
+            lastClock: '',
         }
     },
     computed: {
@@ -59,6 +60,12 @@ export default {
             // let userId = this.getUserId
             let token = this.getToken;
             console.log(token);
+            this.lastClock = await getLastClockByUserId(25, token);
+            if (this.lastClock.data.status == true) {
+                this.clockIn = !this.lastClock.data.status;
+                this.beginDate = this.lastClock.data.time;
+                console.log(this.lastClock);
+            }
             try {
                 // if (userId != 0) {
                 if (!this.clockIn) {
@@ -81,19 +88,33 @@ export default {
             }
         }
     },
-    mounted: function () {
-        setInterval(() => {
-            this.time = moment().format("HH:mm")
-            this.time2 = moment().format("YYYY-MM-DD HH:mm:ss")
-            if (!this.clockIn) {
-                let dateDeb = new Date(this.beginDate)
-                let currentTime = new Date(this.time2)
-                let timetemp = currentTime - dateDeb
-                this.timepassed = moment(timetemp).utc().format("HH:mm")
-                this.secondsPassed = moment(timetemp).utc().format("ss")
-            }
-        }, 1000)
-    },
+    mounted: {
+        function() {
+            setInterval(() => {
+                this.time = moment().format("HH:mm")
+                this.time2 = moment().format("YYYY-MM-DD HH:mm:ss")
+                if (!this.clockIn) {
+                    let dateDeb = new Date(this.beginDate)
+                    let currentTime = new Date(this.time2)
+                    let timetemp = currentTime - dateDeb
+                    this.timepassed = moment(timetemp).utc().format("HH:mm")
+                    this.secondsPassed = moment(timetemp).utc().format("ss")
+                }
+            }, 1000)
+        },
+        setLastClock() {
+            setLastClock(async () => {
+                let token = this.getToken;
+                console.log(token);
+                this.lastClock = await getLastClockByUserId(25, token);
+                if (this.lastClock.data.status == true) {
+                    this.clockIn = !this.lastClock.data.status;
+                    this.beginDate = this.lastClock.data.time;
+                    console.log(this.lastClock);
+                }
+            })
+        }
+    }
 }
 </script>
 
@@ -263,5 +284,4 @@ button:active {
     margin-left: 20px;
     box-shadow: var(--boxShadowStatus);
 }
-
 </style>

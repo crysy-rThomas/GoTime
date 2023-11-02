@@ -15,7 +15,9 @@
             <input type="text" name="email" v-model="email">
             <label for="password">Password :</label>
             <input type="password" name="password" v-model="password">
-            <p>don't have an account yet? you can <a href="">register here</a></p>
+            <p>don't have an account yet? you can
+              <router-link to="/register"><a href="">register here</a></router-link>
+            </p>
             <input type="submit" value="Submit" name="Submit">
           </form>
         </div>
