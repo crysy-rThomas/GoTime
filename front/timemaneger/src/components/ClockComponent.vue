@@ -60,12 +60,6 @@ export default {
             // let userId = this.getUserId
             let token = this.getToken;
             console.log(token);
-            this.lastClock = await getLastClockByUserId(25, token);
-            if (this.lastClock.data.status == true) {
-                this.clockIn = !this.lastClock.data.status;
-                this.beginDate = this.lastClock.data.time;
-                console.log(this.lastClock);
-            }
             try {
                 // if (userId != 0) {
                 if (!this.clockIn) {
@@ -86,10 +80,22 @@ export default {
             } catch (e) {
                 console.error('Error adding clock:', e);
             }
-        }
-    },
-    mounted: {
-        function() {
+        },
+        async setLastClock() {
+            let token = this.getToken;
+            console.log(token);
+            const response = await getLastClockByUserId(25, token);
+            console.log(response.data.data[0].status);
+            if (response.data.data[0].status == true) {
+                this.clockIn = !response.data.data[0].status;
+                this.beginDate = response.data.data[0].time;
+                this.title = 'Working';
+                console.log(response.data);
+            } else {
+                this.title = 'Resting';
+            }
+        },
+        setInterval() {
             setInterval(() => {
                 this.time = moment().format("HH:mm")
                 this.time2 = moment().format("YYYY-MM-DD HH:mm:ss")
@@ -100,20 +106,12 @@ export default {
                     this.timepassed = moment(timetemp).utc().format("HH:mm")
                     this.secondsPassed = moment(timetemp).utc().format("ss")
                 }
-            }, 1000)
-        },
-        setLastClock() {
-            setLastClock(async () => {
-                let token = this.getToken;
-                console.log(token);
-                this.lastClock = await getLastClockByUserId(25, token);
-                if (this.lastClock.data.status == true) {
-                    this.clockIn = !this.lastClock.data.status;
-                    this.beginDate = this.lastClock.data.time;
-                    console.log(this.lastClock);
-                }
-            })
+            }, 1000);
         }
+    },
+    mounted() {
+        this.setLastClock()
+        this.setInterval()
     }
 }
 </script>
