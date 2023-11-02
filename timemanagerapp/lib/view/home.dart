@@ -676,11 +676,11 @@ class _HomePageState extends State<HomePage> {
                         left: size.width * 0.3,
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.black,
+                            color: Colors.white,
                             borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.9),
+                                color: Colors.white.withOpacity(0.9),
                                 blurRadius: 10,
                                 offset: const Offset(0, 5),
                               ),
