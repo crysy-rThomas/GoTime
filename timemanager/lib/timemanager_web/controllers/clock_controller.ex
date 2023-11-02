@@ -107,4 +107,22 @@ defmodule TimemanagerWeb.ClockController do
     end
   end
 
+  def get_last_clock_with_token(conn,_params) do
+    decoded_token = Timemanager.Tokens.get_decoded_token(conn)
+    id = decoded_token["user_id"]
+    client = Users.get_user(id)
+
+    case client do
+      {:ok, _} ->
+        clocks = Clocks.get_last_clock_from_user_id(id)
+        conn
+        |> put_status(:ok)
+        |> render(:index, clocks: clocks)
+      {:error, _reason} ->
+        conn
+        |> put_status(:ok)
+        |> render(:error, error: "Could not find user with id #{id}")
+    end
+  end
+
 end

@@ -26,6 +26,7 @@ defmodule TimemanagerWeb.Router do
     resources("/roles", RoleController, except: [:new, :edit])
     resources("/users", UserController, except: [:new, :edit])
     resources("/clocks", ClockController, except: [:new, :edit, :index])
+    get("/clocks/user/last", ClockController, :get_last_clock_with_token)
     get("/clocks/user/:id", ClockController, :show_clocks_from_user_id)
     get("/clocks/user/last/:id", ClockController, :get_last_clock)
     resources("/working", WorkingtimeController, except: [:new, :edit])
