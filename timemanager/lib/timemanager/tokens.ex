@@ -32,6 +32,29 @@ defmodule Timemanager.Tokens do
     end
   end
 
+  def get_decoded_token(conn) do
+    tokenHeader = from_request(conn)
+    case tokenHeader do
+      nil ->
+        unauth(conn,"No Token provided")
+      _ ->
+        decoded_token = Phoenix.Token.verify(TimemanagerWeb.Endpoint, "user auth", tokenHeader)
+        case decoded_token do
+          {:ok, decoded_token} ->
+            check_token_age(decoded_token, conn)
+            user = Users.get_user(decoded_token["user_id"])
+            case user do
+              {:ok, user}
+              ->
+                decoded_token
+              {:error, _reason} ->
+                unauth(conn,"User not found with id #{decoded_token["user_id"]}")
+            end
+          {:error, _reason} ->
+            unauth(conn,"Token invalid")
+        end
+    end
+  end
 
   def check_token(conn) do
     tokenHeader = from_request(conn)
