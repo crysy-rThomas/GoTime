@@ -13,6 +13,7 @@ export const addUser = (email, firstname, lastname, password) => {
   });
 };
 
+
 export const login = (email, password) => {
   return axios.post(`${BASE_URL_REGISTER}/login`, {
     email: email,

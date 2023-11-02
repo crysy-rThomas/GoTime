@@ -15,7 +15,7 @@ export const getAllClocksByUserId = (userId) => {
       url: BASE_URL + `/clocks/user/${userId}`,
     })
     .then((response) => {
-      console.log(response.data);
+      return response.data;
     });
   // return axios.get(`${BASE_URL}/clocks/user/${userId}`);
 };
@@ -39,6 +39,17 @@ export const addClock = (status, datetime, description, userId, token) => {
         user: userId,
       },
     },
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
+};
+
+export const getClocks = (token) => {
+  return axios.get(
+    `${BASE_URL}/clocks/user`,
     {
       headers: {
         Authorization: "Bearer " + token,

@@ -7,6 +7,8 @@
 <script>
 import { LineChart } from "vue-chart-3";
 import { Chart, registerables } from "chart.js";
+import { getClocks } from "../services/clockService";
+import { mapGetters } from "vuex";
 
 Chart.register(...registerables);
 
@@ -15,18 +17,21 @@ export default {
   components: { LineChart },
   setup() {
     const data = {
-      labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "saturday"],
+      labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
       datasets: [
         {
           label: "# of Votes",
           data: [9, 9, 7, 10, 9.30, 8],
+          fill: false,
+          borderColor: 'rgb(75, 192, 192)',
+          tension: 0.1
         },
       ],
     };
 
     const options = {
-      responsive: true, // Make the chart responsive
-      maintainAspectRatio: false, // Do not maintain aspect ratio
+      responsive: true,
+      maintainAspectRatio: false,
       scales: {
         x: {},
         y: {
@@ -38,8 +43,33 @@ export default {
 
     return { data, options };
   },
+  methods: {
+    async fetchClocks() {
+      let token = this.getToken;
+      console.log(token);
+      try {
+        const response = await getClocks(token);
+        const clocks = response.data;
+        console.log(clocks);
+      } catch (error) {
+        console.error("Error fetching clocks:", error);
+      }
+    },
+    getDayOfTheWeek(dateString){
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const date = new Date(dateString);
+      return days[date.getDay()];
+    }
+  },
+  computed: {
+    ...mapGetters(["getToken"]),
+  },
+  mounted() {
+    this.fetchClocks();
+  }
 };
 </script>
+
 
 <style>
 #graph-content {

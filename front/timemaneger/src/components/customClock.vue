@@ -1,6 +1,10 @@
 <template>
     <div id="customClock">
+<<<<<<< HEAD
         <h2 style="color: #3464B5; text-align: center; font-family: 'Outfit';">Custom Clock</h2>
+=======
+        <h2 style="color: #3464B5; text-align: center; font-family: Outfit;">Custom Clock</h2>
+>>>>>>> 4c8fba4 (save)
         <form style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
             <input ref="dateTimeInput1" style="margin-bottom: 15px;" class="input" type="datetime-local" id="meeting-time-1"
                 name="start-time-1" v-model="beginTime" />
@@ -47,10 +51,6 @@ export default {
     },
 }
 </script>
-
-
-
-
 
 <style>
 #customClock {
