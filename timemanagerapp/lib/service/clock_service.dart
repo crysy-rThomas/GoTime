@@ -49,7 +49,8 @@ class ClockService {
     }
   }
 
-  Future<String> clockInOrOut(int id, bool status, String description) async {
+  Future<String> clockInOrOut(
+      int id, bool status, String description, DateTime date) async {
     const FlutterSecureStorage storage = FlutterSecureStorage();
     final String? token = await storage.read(key: 'access_token');
     try {
@@ -61,7 +62,7 @@ class ClockService {
             "status": status,
             "description": description,
             "user": id,
-            "time": DateFormat("yyyy-MM-dd HH:mm").format(DateTime.now()),
+            "time": DateFormat("yyyy-MM-dd HH:mm").format(date),
           }
         },
         options: Options(

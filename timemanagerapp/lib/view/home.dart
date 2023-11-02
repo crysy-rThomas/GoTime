@@ -6,7 +6,9 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:giffy_dialog/giffy_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:timemanagerapp/model/clock_model.dart';
 import 'package:timemanagerapp/model/user_model.dart';
@@ -15,6 +17,7 @@ import 'package:timemanagerapp/service/authentification.dart';
 import 'package:timemanagerapp/service/clock_service.dart';
 import 'package:timemanagerapp/service/user_service.dart';
 import 'package:timemanagerapp/service/working_service.dart';
+import 'package:timemanagerapp/utils/dialog_new_date.dart';
 import 'package:timemanagerapp/utils/indicator.dart';
 import 'package:timemanagerapp/utils/loading_screen.dart';
 import 'package:timemanagerapp/utils/number_utils.dart';
@@ -148,8 +151,6 @@ class _HomePageState extends State<HomePage> {
     });
     fullClocks = await ClockService().getMyClocks(selected);
     fullWorkings = await WorkingService().getMyWorkingTimes(selected);
-    print(fullClocks);
-    print(fullWorkings);
     setState(() {
       loadingPage = false;
     });
@@ -169,7 +170,10 @@ class _HomePageState extends State<HomePage> {
           time += working.endTime.difference(working.startTime).inMinutes;
         }
       }
-      spots.add(FlSpot(i.toDouble(), (time ~/ 60).toDouble()));
+      if (maxheight < (time ~/ 60).toDouble()) {
+        maxheight = (time ~/ 60).toDouble() + 2;
+      }
+      spots.add(FlSpot((6 - i).toDouble(), (time ~/ 60).toDouble()));
     }
 
     return spots;
@@ -251,7 +255,10 @@ class _HomePageState extends State<HomePage> {
             .difference(clocksOfTheDay[i].time)
             .inMinutes;
       }
-      spots.add(FlSpot(i.toDouble(), (time ~/ 60).toDouble()));
+      if (maxheight < (time ~/ 60).toDouble()) {
+        maxheight = (time ~/ 60).toDouble() + 2;
+      }
+      spots.add(FlSpot((6 - i).toDouble(), (time ~/ 60).toDouble()));
     }
     return spots;
   }
@@ -735,27 +742,72 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          int? myId = int.tryParse(
-              await (const FlutterSecureStorage()).read(key: 'id') ?? "-1");
-          if (myId == null) {
-            showSnackBar("You are not logged in", isError: true);
-            return;
-          }
-          await ClockService().clockInOrOut(
-            myId,
-            (fullClocks.length % 2 == 0),
-            "Clock ${(fullClocks.length % 2 == 0) ? "in" : "out"} at ${DateFormat("yyyy-mm-dd hh:mm").format(DateTime.now())}",
-          );
-          getClocksAndWorking();
-          setState(() {});
-        },
+      floatingActionButton: SpeedDial(
         backgroundColor: Colors.white,
-        child: Icon(
-          (fullClocks.length % 2 == 0) ? Icons.timer : Icons.timer_off,
-          color: Colors.black,
-        ),
+        icon: Icons.av_timer,
+        iconTheme: const IconThemeData(color: Colors.black),
+        children: [
+          SpeedDialChild(
+            onTap: () async {
+              int? myId = int.tryParse(
+                  await (const FlutterSecureStorage()).read(key: 'id') ?? "-1");
+              if (myId == null) {
+                showSnackBar("You are not logged in", isError: true);
+                return;
+              }
+              await ClockService().clockInOrOut(
+                myId,
+                (fullClocks.length % 2 == 0),
+                "Clock ${(fullClocks.length % 2 == 0) ? "in" : "out"} at ${DateFormat("yyyy-mm-dd hh:mm").format(DateTime.now())}",
+                DateTime.now(),
+              );
+              getClocksAndWorking();
+              setState(() {});
+            },
+            backgroundColor: Colors.white,
+            child: Icon(
+              (fullClocks.length % 2 == 0) ? Icons.timer : Icons.timer_off,
+              color: Colors.black,
+            ),
+          ),
+          SpeedDialChild(
+            onTap: () async {
+              int? myId = int.tryParse(
+                  await (const FlutterSecureStorage()).read(key: 'id') ?? "-1");
+              if (myId == null) {
+                showSnackBar("You are not logged in", isError: true);
+                return;
+              }
+              Tuple2<DateTime, DateTime>? res = await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return const DialogNewDate();
+                },
+              );
+              if (res == null) return;
+              await ClockService().clockInOrOut(
+                myId,
+                true,
+                "Clock in at ${DateFormat("yyyy-mm-dd hh:mm").format(res.item1)}",
+                res.item1,
+              );
+
+              await ClockService().clockInOrOut(
+                myId,
+                false,
+                "Clock in at ${DateFormat("yyyy-mm-dd hh:mm").format(res.item1)}",
+                res.item2,
+              );
+              getClocksAndWorking();
+              setState(() {});
+            },
+            backgroundColor: Colors.white,
+            child: const Icon(
+              Icons.add,
+              color: Colors.black,
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

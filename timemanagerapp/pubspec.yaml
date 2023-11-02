@@ -47,6 +47,8 @@ dependencies:
   flutter_typeahead: ^4.6.2
   url_launcher: ^6.1.11
   fl_chart: ^0.64.0
+  flutter_speed_dial: ^7.0.0
+  giffy_dialog: ^2.0.0+2
 
 dev_dependencies:
   flutter_test:

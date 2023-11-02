@@ -47,10 +47,12 @@ Future<DateTime?> chooseDateTime(context, DateTime date) async {
     initialDate: date,
     locale: const Locale('fr', ''),
     firstDate: DateTime(1910),
-    lastDate: DateTime(2030),
-    helpText: 'Sélectionner la date',
+    lastDate: DateTime.now().add(
+      const Duration(days: 1),
+    ),
+    helpText: 'Choose a date',
     confirmText: 'Ok',
-    cancelText: 'Annuler',
+    cancelText: 'Cancel',
     builder: (context, child) {
       return Theme(
         data: ThemeData.light().copyWith(

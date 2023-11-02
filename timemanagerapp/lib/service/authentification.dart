@@ -18,6 +18,7 @@ class Authentification {
         data: {
           "email": email,
           "password": password,
+          "phone": true,
         },
       ).onError((DioError error, stackTrace) async {
         return Response(
