@@ -13,7 +13,20 @@ defmodule TimemanagerWeb.ClockController do
     render(conn, :index, clocks: clocks)
   end
 
+
+  defp get_client(conn, clock_params) do
+    case clock_params["user"] do
+      -1 ->
+        token = Timemanager.Tokens.get_decoded_token(conn)
+        id = token["user_id"]
+        clock_params = Map.put(clock_params, "user", id)
+      _ ->
+        clock_params
+    end
+  end
+
   def create(conn, %{"clock" => clock_params}) do
+    clock_params = get_client(conn, clock_params)
     client = Users.get_user(clock_params["user"])
     case client do
       {:ok, _} ->
