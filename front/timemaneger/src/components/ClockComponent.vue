@@ -81,7 +81,19 @@ export default {
                 console.error('Error adding clock:', e);
             }
         },
-<<<<<<< HEAD
+        startInterval() {
+            setInterval(() => {
+                this.time = moment().format("HH:mm")
+                this.time2 = moment().format("YYYY-MM-DD HH:mm:ss")
+                if (!this.clockIn) {
+                    let dateDeb = new Date(this.beginDate)
+                    let currentTime = new Date(this.time2)
+                    let timetemp = currentTime - dateDeb
+                    this.timepassed = moment(timetemp).utc().format("HH:mm")
+                    this.secondsPassed = moment(timetemp).utc().format("ss")
+                }
+            }, 1000)
+        },
         async setLastClock() {
             let token = this.getToken;
             console.log(token);
@@ -96,46 +108,11 @@ export default {
                 this.title = 'Resting';
             }
         },
-        setInterval() {
-            setInterval(() => {
-                this.time = moment().format("HH:mm")
-                this.time2 = moment().format("YYYY-MM-DD HH:mm:ss")
-                if (!this.clockIn) {
-                    let dateDeb = new Date(this.beginDate)
-                    let currentTime = new Date(this.time2)
-                    let timetemp = currentTime - dateDeb
-                    this.timepassed = moment(timetemp).utc().format("HH:mm")
-                    this.secondsPassed = moment(timetemp).utc().format("ss")
-                }
-            }, 1000);
-        }
-    },
-    mounted() {
-        this.setLastClock()
-        this.setInterval()
-    }
-=======
-        startInterval() {
-            setInterval(() => {
-            this.time = moment().format("HH:mm")
-            this.time2 = moment().format("YYYY-MM-DD HH:mm:ss")
-            if (!this.clockIn) {
-                let dateDeb = new Date(this.beginDate)
-                let currentTime = new Date(this.time2)
-                let timetemp = currentTime - dateDeb
-                this.timepassed = moment(timetemp).utc().format("HH:mm")
-                this.secondsPassed = moment(timetemp).utc().format("ss")
-            }
-            }, 1000)
-        },
-        setLastClock() {
-        },
     },
     mounted() {
         this.startInterval();
         this.setLastClock();
     },
->>>>>>> efacd17 (lien du linechart avec l'api)
 }
 </script>
 
