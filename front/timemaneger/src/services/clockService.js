@@ -28,7 +28,7 @@ export const getLastClockByUserId = (userId, token) => {
   });
 };
 
-export const addClock = (status, datetime, description, userId, token) => {
+export const addClock = (status, datetime, description, token) => {
   return axios.post(
     `${BASE_URL}/clocks`,
     {
@@ -36,7 +36,7 @@ export const addClock = (status, datetime, description, userId, token) => {
         status: status,
         time: datetime,
         description: description,
-        user: userId,
+        user: -1,
       },
     },
     {

@@ -67,13 +67,13 @@ export default {
                     this.statusColor = '#34a300';
                     this.boxShadowStatus = '0px 0px 45px 5px #34a300';
                     this.beginDate = moment().format("YYYY-MM-DD HH:mm:ss")
-                    await addClock(!this.clockIn, moment().format("YYYY-MM-DD HH:mm"), "Clock In", 25, token);
+                    await addClock(!this.clockIn, moment().format("YYYY-MM-DD HH:mm"), "Clock In", token);
                 } else {
                     this.title = 'Resting';
                     this.statusColor = '#aa0000';
                     this.boxShadowStatus = '0px 0px 45px 5px #aa0000';
                     this.endDate = moment().format("YYYY-MM-DD HH:mm:ss")
-                    await addClock(!this.clockIn, moment().format("YYYY-MM-DD HH:mm"), "Clock Out", 25, token);
+                    await addClock(!this.clockIn, moment().format("YYYY-MM-DD HH:mm"), "Clock Out", token);
 
                 }
                 // }
@@ -81,6 +81,7 @@ export default {
                 console.error('Error adding clock:', e);
             }
         },
+<<<<<<< HEAD
         async setLastClock() {
             let token = this.getToken;
             console.log(token);
@@ -113,6 +114,28 @@ export default {
         this.setLastClock()
         this.setInterval()
     }
+=======
+        startInterval() {
+            setInterval(() => {
+            this.time = moment().format("HH:mm")
+            this.time2 = moment().format("YYYY-MM-DD HH:mm:ss")
+            if (!this.clockIn) {
+                let dateDeb = new Date(this.beginDate)
+                let currentTime = new Date(this.time2)
+                let timetemp = currentTime - dateDeb
+                this.timepassed = moment(timetemp).utc().format("HH:mm")
+                this.secondsPassed = moment(timetemp).utc().format("ss")
+            }
+            }, 1000)
+        },
+        setLastClock() {
+        },
+    },
+    mounted() {
+        this.startInterval();
+        this.setLastClock();
+    },
+>>>>>>> efacd17 (lien du linechart avec l'api)
 }
 </script>
 
