@@ -7,12 +7,17 @@ defmodule TimemanagerWeb.WorkingtimeController do
   alias Timemanager.Users
 
   action_fallback TimemanagerWeb.FallbackController
-
+  @doc """
+  List all workingtimes.
+  """
   def index(conn, _params) do
     workingtimes = Workingtimes.list_workingtimes()
     render(conn, :index, workingtimes: workingtimes)
   end
 
+  @doc """
+  Create a new workingtime.
+  """
   def create(conn, %{"workingtime" => workingtime_params}) do
     with {:ok, %Workingtime{} = workingtime} <- Workingtimes.create_workingtime(workingtime_params) do
       conn
@@ -22,11 +27,17 @@ defmodule TimemanagerWeb.WorkingtimeController do
     end
   end
 
+  @doc """
+  Show a specific workingtime.
+  """
   def show(conn, %{"id" => id}) do
     workingtime = Workingtimes.get_workingtime!(id)
     render(conn, :show, workingtime: workingtime)
   end
 
+  @doc """
+  Update a specific workingtime.
+  """
   def update(conn, %{"id" => id, "workingtime" => workingtime_params}) do
     workingtime = Workingtimes.get_workingtime!(id)
 
@@ -35,6 +46,9 @@ defmodule TimemanagerWeb.WorkingtimeController do
     end
   end
 
+  @doc """
+  Delete a specific workingtime.
+  """
   def delete(conn, %{"id" => id}) do
     workingtime = Workingtimes.get_workingtime!(id)
 
@@ -43,6 +57,9 @@ defmodule TimemanagerWeb.WorkingtimeController do
     end
   end
 
+  @doc """
+  Show a specific workingtime from user.
+  """
   def show_working_from_user_id(conn, %{"id" => id}) do
     IO.inspect("------------User found1----------------")
     client = Users.get_user(id)

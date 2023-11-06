@@ -10,13 +10,17 @@ defmodule TimemanagerWeb.UserController do
 
 
   action_fallback(TimemanagerWeb.FallbackController)
-
+    @doc """
+    List all users.
+    """
     def index(conn, _params) do
       users = Users.list_users()
       render(conn, :index, users: users)
     end
 
-
+    @doc """
+    Create a new user.
+    """
   def create(conn, %{"user" => user_params}) do
         check_email_is_used = Users.get_user_by_email(user_params["email"])
         case check_email_is_used do
@@ -34,7 +38,9 @@ defmodule TimemanagerWeb.UserController do
         end
 
   end
-
+  @doc """
+  Show a specific user.
+  """
   def show(conn, %{"id" => id}) do
     user = Users.get_user(id)
     case user do
@@ -47,6 +53,9 @@ defmodule TimemanagerWeb.UserController do
     end
   end
 
+  @doc """
+  Update a specific user.
+  """
   def update(conn, %{"id" => id, "user" => user_params}) do
     user = Users.get_user(id)
     case user do
@@ -69,6 +78,9 @@ defmodule TimemanagerWeb.UserController do
     end
   end
 
+  @doc """
+  Delete a specific user.
+  """
   def delete(conn, %{"id" => id}) do
     user = Users.get_user(id)
     case user do

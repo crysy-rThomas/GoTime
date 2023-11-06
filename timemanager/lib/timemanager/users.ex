@@ -125,6 +125,14 @@ defmodule Timemanager.Users do
     end
   end
 
+  @doc """
+  Returns the user with the given email.
+
+  ## Examples
+
+      iex> get_user_by_email("ryan@gmail.com")
+      %User{}
+  """
   def get_user_by_email(email) do
     IO.inspect(email)
     Repo.get_by(User, email: email)
