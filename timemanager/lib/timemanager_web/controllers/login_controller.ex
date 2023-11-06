@@ -2,7 +2,6 @@ defmodule TimemanagerWeb.LoginController do
   use TimemanagerWeb, :controller
 
   alias Timemanager.Users
-  alias Timemanager.Tokens
 
   @doc """
    return the token from  email and password user

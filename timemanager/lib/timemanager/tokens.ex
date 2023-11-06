@@ -4,8 +4,6 @@ defmodule Timemanager.Tokens do
   """
   import Plug.Conn
   alias Timemanager.Tokens
-
-  alias Timemanager.Tokens.Token
   alias Timemanager.Users
 
 
@@ -57,7 +55,7 @@ defmodule Timemanager.Tokens do
             check_token_age(decoded_token, conn)
             user = Users.get_user(decoded_token["user_id"])
             case user do
-              {:ok, user}
+              {:ok, ^user}
               ->
                 decoded_token
               {:error, _reason} ->
@@ -86,7 +84,7 @@ defmodule Timemanager.Tokens do
             check_token_age(decoded_token, conn)
             user = Users.get_user(decoded_token["user_id"])
             case user do
-              {:ok, user}
+              {:ok, ^user}
               ->
                 conn
               {:error, _reason} ->
@@ -116,8 +114,6 @@ defmodule Timemanager.Tokens do
           else
               {:ok, token_age}
           end
-        nil ->
-          {:error, "Token invalid"}
       end
     else
       {:ok, token}

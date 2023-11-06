@@ -1,7 +1,6 @@
 defmodule Timemanager.Users.User do
   use Ecto.Schema
   import Ecto.Changeset
-  import Bcrypt
 
   schema "users" do
     field(:password, :string)
