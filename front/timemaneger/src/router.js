@@ -5,12 +5,19 @@ import ForcastChart from '@/components/ForcastChart.vue'
 import ConnexionForm from '@/components/ConnexionForm.vue'
 import RegisterForm from '@/components/RegisterForm.vue'
 import WeatherSearch from '@/components/WeatherSearch.vue'
+import homePage from '@/components/homePage.vue'
+import personalInformation from '@/components/persoInfo'
 
 const routes = [
   {
     path: '/currentWeather/:city',
     name: 'currentWeather',
     component: CurrentWeather
+  },
+  {
+    path: '/personalInformation',
+    name: 'personalInformation',
+    component: personalInformation
   },
   {
     path: '/forecastChart/:city',
@@ -31,6 +38,11 @@ const routes = [
     path: '/weatherSeach',
     name: 'weatherSearch',
     component: WeatherSearch
+  },
+  {
+    path: '/home',
+    name: 'homePage',
+    component: homePage
   }
 ]
 

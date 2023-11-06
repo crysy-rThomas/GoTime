@@ -12,7 +12,7 @@
                     <img id="logo" src="../assets/logo.png">
                     <form @submit.prevent="handleSubmit">
                         <div id="inputs">
-                            
+
                             <div class="input-group">
                                 <label for="firstname">First Name:</label>
                                 <input type="text" name="firstname" id="firstname" v-model="firstname">
@@ -33,9 +33,14 @@
                                 <input type="password" name="password" id="password" v-model="password">
                             </div>
 
-                        </div>    
+                        </div>
                         <div style="width: 80%; margin: auto;">
                             <input type="submit" value="Register" name="Submit">
+                        </div>
+                        <div>
+                            <p style="text-align: center;">Have an account ?
+                                <router-link to="/connexion"><a href="">Login here</a></router-link>
+                            </p>
                         </div>
                     </form>
                 </div>
@@ -45,42 +50,45 @@
 </template>
 
 <script>
-    import { addUser } from '@/services/userService'; // Update the path accordingly
-    export default {
-        name: 'RegisterForm',
-        data() {
-            return {
-                email: '',
-                firstname: '',
-                lastname: '',
-                password: '', 
-            }
-        },
-        methods: {
+import { addUser } from '@/services/userService';
+export default {
+    name: 'RegisterForm',
+    data() {
+        return {
+            email: '',
+            firstname: '',
+            lastname: '',
+            password: '',
+        }
+    },
+    methods: {
         async handleSubmit() {
-            console.log("ZEGZEGZEGZEG");
             try {
-                const response = await addUser(this.email, this.firstname, this.lastname, this.password);
-                console.log(response.data);
+                await addUser(this.email, this.firstname, this.lastname, this.password);
+                this.$router.push("/connexion");
             } catch (error) {
                 console.error('Error adding user:', error);
             }
         }
     }
-    }
+}
 </script>
 
 <style scoped>
-
 .m-a {
     margin: auto;
 }
 
-p, input, h1, h2, h2, label {
+p,
+input,
+h1,
+h2,
+h2,
+label {
     font-family: 'Open Sans', sans-serif;
 }
 
-form{
+form {
     width: 100%;
     height: 100%;
 }
@@ -99,15 +107,17 @@ form{
 #bottom-div {
     background-color: rgb(232, 233, 235);
     height: 70%;
-    padding: 30px; /* Unified padding */
+    padding: 30px;
+    /* Unified padding */
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-evenly; /* Distribute space evenly */
+    justify-content: space-evenly;
+    /* Distribute space evenly */
     border-radius: 0 0 20px 20px;
 }
 
-#inputs{
+#inputs {
     width: 80%;
     margin: auto;
 }
@@ -118,7 +128,7 @@ form{
     width: 100%;
     display: flex;
     flex-direction: column;
-    box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.36);
+    box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.36);
     border-radius: 20px;
 }
 
@@ -151,15 +161,15 @@ form{
     font-size: 16px;
     color: #888;
     pointer-events: none;
-    transition: top 0.3s ease, font-size 0.3s ease, color 0.3s ease; 
+    transition: top 0.3s ease, font-size 0.3s ease, color 0.3s ease;
 }
 
-input[type="text"]:focus + label,
-input[type="text"]:not(:placeholder-shown) + label,
-input[type="email"]:focus + label,
-input[type="email"]:not(:placeholder-shown) + label,
-input[type="password"]:focus + label,
-input[type="password"]:not(:placeholder-shown) + label {
+input[type="text"]:focus+label,
+input[type="text"]:not(:placeholder-shown)+label,
+input[type="email"]:focus+label,
+input[type="email"]:not(:placeholder-shown)+label,
+input[type="password"]:focus+label,
+input[type="password"]:not(:placeholder-shown)+label {
     top: -10px;
     left: 5px;
     font-size: 12px;
@@ -167,9 +177,9 @@ input[type="password"]:not(:placeholder-shown) + label {
 }
 
 /* Common input styles */
-input[type="text"], 
-input[type="email"], 
-input[type="password"], 
+input[type="text"],
+input[type="email"],
+input[type="password"],
 input[type="submit"] {
     width: 100%;
     padding: 12px 15px;
@@ -197,7 +207,9 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
-    background-color: rgb(143, 151, 181);
+    background-color: white;
+    color: rgb(34, 64, 181);
+    border: 2px solid rgb(34, 64, 181);
 }
 
 #main-container {
@@ -212,19 +224,17 @@ input[type="submit"]:hover {
 }
 
 /* Placeholder styling */
-input[type="text"]::placeholder, 
-input[type="password"]::placeholder, 
+input[type="text"]::placeholder,
+input[type="password"]::placeholder,
 input[type="email"]::placeholder {
     color: #888;
     opacity: 1;
 }
 
-input[type="text"]:focus, 
-input[type="password"]:focus, 
+input[type="text"]:focus,
+input[type="password"]:focus,
 input[type="email"]:focus {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     transform: translateY(-2px);
 }
-
-
 </style>
