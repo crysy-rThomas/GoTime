@@ -4,6 +4,9 @@ defmodule TimemanagerWeb.LoginController do
   alias Timemanager.Users
   alias Timemanager.Tokens
 
+  @doc """
+   return the token from  email and password user
+  """
   def login(conn, %{"email" => email, "password" => password} = params) do
     phone = Map.get(params, "phone",nil)
       case Users.authenticate_user(email, password) do

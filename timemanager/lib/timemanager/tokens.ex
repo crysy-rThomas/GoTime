@@ -12,10 +12,15 @@ defmodule Timemanager.Tokens do
   def init(_arg) do
   end
 
+
   def call(conn, _opts) do
     check_token(conn)
   end
 
+
+  @doc """
+  Returns the token in the header of conn
+  """
   def from_request(conn) do
     case Tokens.get_req_header(conn, "authorization") do
       nil -> nil
@@ -24,6 +29,10 @@ defmodule Timemanager.Tokens do
     end
   end
 
+
+  @doc """
+  Returns the value of the given key in the request headers.
+  """
   def get_req_header(conn, key) do
     key = String.downcase(key)
     case Enum.find(conn.req_headers, fn {k, _} -> String.downcase(k) == key end) do
@@ -31,6 +40,10 @@ defmodule Timemanager.Tokens do
       {_k, v} -> v
     end
   end
+
+  @doc """
+  Returns the token decoded in the header of conn
+  """
 
   def get_decoded_token(conn) do
     tokenHeader = from_request(conn)
@@ -55,6 +68,11 @@ defmodule Timemanager.Tokens do
         end
     end
   end
+
+
+  @doc """
+  check validity of token and age of token
+  """
 
   def check_token(conn) do
     tokenHeader = from_request(conn)

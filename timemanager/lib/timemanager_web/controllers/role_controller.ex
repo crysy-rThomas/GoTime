@@ -6,11 +6,16 @@ defmodule TimemanagerWeb.RoleController do
 
   action_fallback TimemanagerWeb.FallbackController
 
+  @doc """
+  List all roles.
+  """
   def index(conn, _params) do
     roles = Roles.list_roles()
     render(conn, :index, roles: roles)
   end
-
+  @doc """
+  Create a new role.
+  """
   def create(conn, %{"role" => role_params}) do
     with {:ok, %Role{} = role} <- Roles.create_role(role_params) do
       conn
@@ -20,11 +25,17 @@ defmodule TimemanagerWeb.RoleController do
     end
   end
 
+  @doc """
+  Show a specific role.
+  """
   def show(conn, %{"id" => id}) do
     role = Roles.get_role!(id)
     render(conn, :show, role: role)
   end
 
+  @doc """
+  Update a specific role.
+  """
   def update(conn, %{"id" => id, "role" => role_params}) do
     role = Roles.get_role!(id)
 
@@ -33,6 +44,9 @@ defmodule TimemanagerWeb.RoleController do
     end
   end
 
+  @doc """
+  Delete a specific role.
+  """
   def delete(conn, %{"id" => id}) do
     role = Roles.get_role!(id)
 

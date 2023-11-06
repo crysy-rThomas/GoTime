@@ -8,6 +8,9 @@ defmodule TimemanagerWeb.ClockController do
 
   action_fallback TimemanagerWeb.FallbackController
 
+  @doc """
+  List all clocks.
+  """
   def index(conn, _params) do
     clocks = Clocks.list_clocks()
     render(conn, :index, clocks: clocks)
@@ -25,6 +28,9 @@ defmodule TimemanagerWeb.ClockController do
     end
   end
 
+  @doc """
+  Create a new clock.
+  """
   def create(conn, %{"clock" => clock_params}) do
     clock_params = get_client(conn, clock_params)
     client = Users.get_user(clock_params["user"])
@@ -43,6 +49,10 @@ defmodule TimemanagerWeb.ClockController do
     end
   end
 
+
+  @doc """
+  Show a specific clock. with id user from token
+  """
   def show(conn, _params) do
     decoded_token = Timemanager.Tokens.get_decoded_token(conn)
     id = decoded_token["user_id"]
@@ -60,6 +70,10 @@ defmodule TimemanagerWeb.ClockController do
     end
   end
 
+
+  @doc """
+  Show a specific clock. with id user given
+  """
   def show_clocks_from_user_id(conn, %{"id" => id}) do
     client = Users.get_user(id)
     case client do
@@ -75,6 +89,10 @@ defmodule TimemanagerWeb.ClockController do
     end
   end
 
+
+  @doc """
+  Update a specific clock.
+  """
   def update(conn, %{"id" => id, "clock" => clock_params}) do
     clock = Clocks.get_clock!(id)
 
@@ -83,6 +101,9 @@ defmodule TimemanagerWeb.ClockController do
     end
   end
 
+  @doc """
+  Delete a specific clock.
+  """
   def delete(conn, %{"id" => id}) do
     clock = Clocks.get_clock!(id)
 
@@ -91,6 +112,10 @@ defmodule TimemanagerWeb.ClockController do
     end
   end
 
+
+  @doc """
+    Get last clock from user with id user given
+  """
   def get_last_clock(conn, %{"id" => id}) do
     client = Users.get_user(id)
 
@@ -106,7 +131,9 @@ defmodule TimemanagerWeb.ClockController do
         |> render(:error, error: "Could not find user with id #{id}")
     end
   end
-
+  @doc """
+    Get last clock from user with id user from token
+  """
   def get_last_clock_with_token(conn,_params) do
     decoded_token = Timemanager.Tokens.get_decoded_token(conn)
     id = decoded_token["user_id"]
