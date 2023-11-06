@@ -14,10 +14,11 @@ class Authentification {
     const FlutterSecureStorage storage = FlutterSecureStorage();
     try {
       final res = await Dio().post(
-        'https://timemanager-epitech-mpl.gigalixirapp.com/api/login',
+        'https://timemanager-epitech-mpl.gigalixirapp.com/login',
         data: {
           "email": email,
           "password": password,
+          "phone": true,
         },
       ).onError((DioError error, stackTrace) async {
         return Response(
@@ -30,12 +31,14 @@ class Authentification {
         storage.delete(key: 'refresh_token');
         return Tuple2(false, res.data["message"]);
       }
+      if (res.data['data']['error'] != null) {
+        return Tuple2(false, res.data['data']['error']);
+      }
       storage.write(key: 'access_token', value: res.data['data']['token']);
       storage.write(key: 'loggedIn', value: "true");
-      List<UserModel> users = await UserService().getAllUsers();
-      int myId =
-          users.firstWhereOrNull((element) => element.email == email)?.id ?? -1;
-      storage.write(key: 'id', value: myId.toString());
+      storage.write(key: 'id', value: res.data['data']['id'].toString());
+      storage.write(key: 'email', value: email);
+      storage.write(key: 'password', value: password);
       return const Tuple2(true, "");
     } catch (e) {
       if (kDebugMode) {
@@ -47,8 +50,52 @@ class Authentification {
     }
   }
 
+  Future<bool> signUp(String email, String password, String firstname,
+      String lastname, int role) async {
+    const FlutterSecureStorage storage = FlutterSecureStorage();
+    try {
+      final res = await Dio().post(
+        'https://timemanager-epitech-mpl.gigalixirapp.com/register',
+        data: {
+          "user": {
+            "email": email,
+            "password": password,
+            "firstname": firstname,
+            "lastname": lastname,
+            "role": role,
+          }
+        },
+      ).onError((DioError error, stackTrace) async {
+        return Response(
+          requestOptions: RequestOptions(path: ''),
+          statusCode: error.response?.statusCode ?? 0,
+          data: error.response?.data ?? {},
+        );
+      });
+      if (res.statusCode != 201) {
+        storage.delete(key: 'refresh_token');
+        return false;
+      }
+      return true;
+    } catch (e) {
+      if (kDebugMode) {
+        log("SignIn");
+        log(e.toString());
+      }
+      return false;
+    }
+  }
+
   Future<void> signOut() async {
     await (const FlutterSecureStorage()).delete(key: 'loggedIn');
+  }
+
+  Future<void> deleteAccount() async {
+    int? myId = int.tryParse(await (const FlutterSecureStorage()).read(key: 'id') ?? "-1");
+    if (myId != null) {
+      await UserService().deleteUser(myId);
+    }
+    await (const FlutterSecureStorage()).deleteAll();
   }
 
   Future<bool> isSignedIn() async {

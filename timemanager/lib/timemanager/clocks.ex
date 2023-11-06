@@ -102,6 +102,29 @@ defmodule Timemanager.Clocks do
     Clock.changeset(clock, attrs)
   end
 
+ @doc """
+  Returns the last clock from a user.
+
+  ## Examples
+     iex> get_last_clock_from_user_id(1)
+     [%Clock{}]
+
+  """
+  def get_last_clock_from_user_id(id) do
+    from(c in Clock, where: c.user == ^id) |> Repo.all()
+    |> Enum.sort_by(& &1.time)
+    |> Enum.reverse()
+    |> Enum.take(1)
+  end
+
+  @doc """
+  Returns the clocks from a user.
+
+  ## Examples
+     iex> get_clocks_from_user(1)
+     [%Clock{}]
+
+  """
   def get_clocks_from_user(id) do
     from(c in Clock, where: c.user == ^id) |> Repo.all()
   end

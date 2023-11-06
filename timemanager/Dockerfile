@@ -24,4 +24,6 @@ RUN npm install --prefix ./assets
 EXPOSE 4000
 
 RUN ["chmod", "+x", "/timemanager/entrypoint.sh"]
-CMD ["/timemanager/entrypoint.sh"]
+
+
+

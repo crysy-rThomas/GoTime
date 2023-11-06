@@ -21,20 +21,26 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController textController = TextEditingController();
+  final TextEditingController firstnameController = TextEditingController();
+  final TextEditingController lastnameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   final FlutterSecureStorage storage = const FlutterSecureStorage();
   final _localAuthentication = LocalAuthentication();
   final LocalAuthentication auth = LocalAuthentication();
   late List<BiometricType> availableBiometrics;
   bool loading = false;
   bool faceId = false;
+  bool signup = false;
   String? email;
 
-  login(Function goToNext, Function(String) error) async {
+  login(Function goToNext, Function(String) error, String emailSent,
+      String passwordSent) async {
     setState(() {
       loading = true;
     });
     final Tuple2<bool, String> user =
-        await Authentification().signIn(email!, textController.text);
+        await Authentification().signIn(emailSent, passwordSent);
     setState(() {
       loading = false;
     });
@@ -144,6 +150,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
+                          const SizedBox(
+                            height: 100,
+                          ),
                           if (email != null)
                             IconButton(
                               onPressed: () {
@@ -154,12 +163,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               },
                               icon: const Icon(
                                 Icons.arrow_back_ios,
-                                color: Colors.white,
+                                color: Colors.black,
                               ),
                             ),
-                          const SizedBox(
-                            height: 20,
-                          ),
                         ],
                       ),
                       Center(
@@ -169,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           width: size.width,
                         ),
                       ),
-                      const SizedBox(height: 32),
+                      if (!signup) const SizedBox(height: 32),
                       Container(
                         width: 432,
                         decoration: BoxDecoration(
@@ -181,9 +187,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Column(
                             children: [
                               SelectableText(
-                                email == null
-                                    ? "Saisir votre identifiant"
-                                    : "Saisir votre mot de passe",
+                                signup
+                                    ? "Saisir vos informations"
+                                    : email == null
+                                        ? "Saisir votre identifiant"
+                                        : "Saisir votre mot de passe",
                                 style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 24,
@@ -192,140 +200,355 @@ class _LoginScreenState extends State<LoginScreen> {
                                 textAlign: TextAlign.center,
                               ),
                               const SizedBox(height: 32),
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: const Color.fromRGBO(248, 249, 250, 1),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: TextField(
-                                    controller: textController,
-                                    obscureText: email != null,
-                                    decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 32),
-                              GestureDetector(
-                                onTap: () {
-                                  if (email == null) {
-                                    if (textController.text.isNotEmpty) {
-                                      email = textController.text;
-                                      textController.clear();
-                                      setState(() {});
-                                    } else {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                          content: SelectableText(
-                                              "Veuillez entrer un email"),
-                                        ),
-                                      );
-                                    }
-                                  } else {
-                                    if (textController.text.isNotEmpty) {
-                                      TextInput.finishAutofillContext();
-                                      login(
-                                        () {
-                                          Navigator.pushReplacementNamed(
-                                              context, '/home');
-                                        },
-                                        (String error) {
-                                          showSnackBar(error, isError: true);
-                                        },
-                                      );
-                                    } else {
-                                      showSnackBar(
-                                          "Veuillez entrer un mot de passe",
-                                          isError: true);
-                                    }
-                                  }
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color:
-                                        const Color.fromRGBO(101, 126, 233, 1),
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(12.0),
-                                          child: loading
-                                              ? const Center(
-                                                  child:
-                                                      CircularProgressIndicator(),
-                                                )
-                                              : Text(
-                                                  email == null
-                                                      ? "Continuer"
-                                                      : "Se connecter",
-                                                  style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                  textAlign: TextAlign.center,
-                                                ),
+                              if (signup)
+                                Column(
+                                  children: [
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: const Color.fromRGBO(
+                                            248, 249, 250, 1),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: TextField(
+                                          controller: firstnameController,
+                                          obscureText: false,
+                                          decoration: const InputDecoration(
+                                            border: InputBorder.none,
+                                            hintText: "Prénom",
+                                          ),
+                                          textAlign: TextAlign.center,
                                         ),
                                       ),
-                                    ],
+                                    ),
+                                    const SizedBox(height: 32),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: const Color.fromRGBO(
+                                            248, 249, 250, 1),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: TextField(
+                                          controller: lastnameController,
+                                          obscureText: false,
+                                          decoration: const InputDecoration(
+                                            border: InputBorder.none,
+                                            hintText: "Nom",
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 32),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: const Color.fromRGBO(
+                                            248, 249, 250, 1),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: TextField(
+                                          controller: emailController,
+                                          obscureText: false,
+                                          decoration: const InputDecoration(
+                                            border: InputBorder.none,
+                                            hintText: "Email",
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 32),
+                                    Container(
+                                      decoration: BoxDecoration(
+                                        color: const Color.fromRGBO(
+                                            248, 249, 250, 1),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: TextField(
+                                          controller: passwordController,
+                                          obscureText: true,
+                                          decoration: const InputDecoration(
+                                            border: InputBorder.none,
+                                            hintText: "Mot de passe",
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        if (firstnameController.text.isEmpty) {
+                                          showSnackBar(
+                                              "Please enter your firstname",
+                                              isError: true);
+                                          return;
+                                        }
+                                        if (lastnameController.text.isEmpty) {
+                                          showSnackBar(
+                                              "Please enter your lastname",
+                                              isError: true);
+                                          return;
+                                        }
+                                        if (emailController.text.isEmpty) {
+                                          showSnackBar(
+                                              "Please enter your email",
+                                              isError: true);
+                                          return;
+                                        }
+                                        if (passwordController.text.isEmpty) {
+                                          showSnackBar(
+                                              "Please enter your password",
+                                              isError: true);
+                                          return;
+                                        }
+                                        setState(() {
+                                          loading = true;
+                                        });
+                                        Authentification()
+                                            .signUp(
+                                                emailController.text,
+                                                passwordController.text,
+                                                firstnameController.text,
+                                                lastnameController.text,
+                                                1)
+                                            .then(
+                                          (value) {
+                                            setState(() {
+                                              loading = false;
+                                            });
+                                            if (value) {
+                                              showSnackBar(
+                                                  "Account created, please log in");
+                                              setState(() {
+                                                signup = false;
+                                                emailController.clear();
+                                                passwordController.clear();
+                                                firstnameController.clear();
+                                                lastnameController.clear();
+                                              });
+                                            } else {
+                                              showSnackBar(
+                                                  "Error while signing up, please try again later",
+                                                  isError: true);
+                                            }
+                                          },
+                                        );
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: const Color.fromRGBO(
+                                              101, 126, 233, 1),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(12.0),
+                                                child: loading
+                                                    ? const Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      )
+                                                    : const Text(
+                                                        "Créer un compte",
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              if (!signup)
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color:
+                                        const Color.fromRGBO(248, 249, 250, 1),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: TextField(
+                                      controller: textController,
+                                      obscureText: email != null,
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              if (faceId) const SizedBox(height: 20),
-                              if (faceId)
+                              if (!signup) const SizedBox(height: 32),
+                              if (!signup)
                                 GestureDetector(
-                                  onTap: () async {
-                                    faceIdFunct(
-                                      () async {
-                                        await (const FlutterSecureStorage())
-                                            .write(
-                                                key: 'loggedIn', value: "true");
-                                        Navigator.pushReplacementNamed(
-                                            context, '/home');
-                                      },
-                                    );
+                                  onTap: () {
+                                    if (email == null) {
+                                      if (textController.text.isNotEmpty) {
+                                        email = textController.text;
+                                        textController.clear();
+                                        setState(() {});
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content: SelectableText(
+                                                "Veuillez entrer un email"),
+                                          ),
+                                        );
+                                      }
+                                    } else {
+                                      if (textController.text.isNotEmpty) {
+                                        TextInput.finishAutofillContext();
+                                        login(
+                                          () {
+                                            Navigator.pushReplacementNamed(
+                                                context, '/home');
+                                          },
+                                          (String error) {
+                                            showSnackBar(error, isError: true);
+                                          },
+                                          email!,
+                                          textController.text,
+                                        );
+                                      } else {
+                                        showSnackBar(
+                                            "Veuillez entrer un mot de passe",
+                                            isError: true);
+                                      }
+                                    }
                                   },
                                   child: Container(
                                     decoration: BoxDecoration(
                                       color: const Color.fromRGBO(
-                                          248, 249, 250, 1),
+                                          101, 126, 233, 1),
                                       borderRadius: BorderRadius.circular(5),
                                     ),
                                     child: Row(
-                                      mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(12.0),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              availableBiometrics.contains(
-                                                      BiometricType.face)
-                                                  ? Image.asset(
-                                                      "assets/face_id.png",
-                                                      width: 28,
-                                                      height: 28,
-                                                    )
-                                                  : const Icon(
-                                                      Icons.fingerprint,
-                                                      color: Colors.black,
-                                                      size: 28,
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(12.0),
+                                            child: loading
+                                                ? const Center(
+                                                    child:
+                                                        CircularProgressIndicator(),
+                                                  )
+                                                : Text(
+                                                    email == null
+                                                        ? "Continuer"
+                                                        : "Se connecter",
+                                                    style: const TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w500,
                                                     ),
-                                            ],
+                                                    textAlign: TextAlign.center,
+                                                  ),
                                           ),
                                         ),
                                       ],
                                     ),
                                   ),
                                 ),
+                              if (!signup)
+                                if (faceId) const SizedBox(height: 20),
+                              if (!signup)
+                                if (faceId)
+                                  GestureDetector(
+                                    onTap: () async {
+                                      String? emailSent =
+                                          await storage.read(key: 'email');
+                                      String? passwordSent =
+                                          await storage.read(key: 'password');
+                                      if (emailSent == null ||
+                                          passwordSent == null) {
+                                        showSnackBar(
+                                          "Veuillez vous (re)connecter",
+                                          isError: true,
+                                        );
+                                        return;
+                                      }
+                                      faceIdFunct(
+                                        () async {
+                                          login(
+                                            () {
+                                              Navigator.pushReplacementNamed(
+                                                  context, '/home');
+                                            },
+                                            (String error) {
+                                              showSnackBar(error,
+                                                  isError: true);
+                                            },
+                                            emailSent,
+                                            passwordSent,
+                                          );
+                                        },
+                                      );
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: const Color.fromRGBO(
+                                            248, 249, 250, 1),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(12.0),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                availableBiometrics.contains(
+                                                        BiometricType.face)
+                                                    ? Image.asset(
+                                                        "assets/face_id.png",
+                                                        width: 28,
+                                                        height: 28,
+                                                      )
+                                                    : const Icon(
+                                                        Icons.fingerprint,
+                                                        color: Colors.black,
+                                                        size: 28,
+                                                      ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                              TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    signup = !signup;
+                                  });
+                                },
+                                child: Text(
+                                  signup ? "Se connecter" : "S'inscrire",
+                                ),
+                              ),
                             ],
                           ),
                         ),

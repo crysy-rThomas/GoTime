@@ -8,6 +8,7 @@
         <div id="row-group">
             <div id="time-passed">
                 <p id="timePassedStyle">{{ timepassed }}</p>
+                <p id="secondsPassedStyle">{{ secondsPassed }}</p>
             </div>
             <div id="status">
                 <h1>{{ title }}</h1>
@@ -30,38 +31,88 @@
 
 <script>
 import moment from "moment";
+import { mapGetters } from "vuex";
+import { addClock, getLastClockByUserId } from "@/services/clockService";
 export default {
     name: "ClockComponent",
     data() {
         return {
             time: moment().format("HH:mm"),
+            time2: moment().format("YYYY-MM-DD HH:mm:ss"),
             date: moment().format("DD/MM"),
-            timepassed: '06:10',
+            timepassed: '00:00',
             title: '-',
             clockIn: true,
             statusColor: '#34a300',
-            boxShadowStatus: '0px 0px 45px 5px #34a300'
+            boxShadowStatus: '0px 0px 45px 5px #34a300',
+            beginDate: '',
+            endDate: '',
+            secondsPassed: '00',
+            lastClock: '',
         }
+    },
+    computed: {
+        ...mapGetters(["getUserId", "getToken"]),
     },
     methods: {
-        clockChange() {
+        async clockChange() {
             this.clockIn = !this.clockIn;
-            if (!this.clockIn) {
-                this.title = 'Present';
-                this.statusColor = '#34a300';
-                this.boxShadowStatus = '0px 0px 45px 5px #34a300';
-            } else {
-                this.title = 'Absent';
-                this.statusColor = '#aa0000';
-                this.boxShadowStatus = '0px 0px 45px 5px #aa0000';
+            // let userId = this.getUserId
+            let token = this.getToken;
+            console.log(token);
+            try {
+                // if (userId != 0) {
+                if (!this.clockIn) {
+                    this.title = 'Working';
+                    this.statusColor = '#34a300';
+                    this.boxShadowStatus = '0px 0px 45px 5px #34a300';
+                    this.beginDate = moment().format("YYYY-MM-DD HH:mm:ss")
+                    await addClock(!this.clockIn, moment().format("YYYY-MM-DD HH:mm"), "Clock In", token);
+                } else {
+                    this.title = 'Resting';
+                    this.statusColor = '#aa0000';
+                    this.boxShadowStatus = '0px 0px 45px 5px #aa0000';
+                    this.endDate = moment().format("YYYY-MM-DD HH:mm:ss")
+                    await addClock(!this.clockIn, moment().format("YYYY-MM-DD HH:mm"), "Clock Out", token);
+
+                }
+                // }
+            } catch (e) {
+                console.error('Error adding clock:', e);
             }
-        }
+        },
+        startInterval() {
+            setInterval(() => {
+                this.time = moment().format("HH:mm")
+                this.time2 = moment().format("YYYY-MM-DD HH:mm:ss")
+                if (!this.clockIn) {
+                    let dateDeb = new Date(this.beginDate)
+                    let currentTime = new Date(this.time2)
+                    let timetemp = currentTime - dateDeb
+                    this.timepassed = moment(timetemp).utc().format("HH:mm")
+                    this.secondsPassed = moment(timetemp).utc().format("ss")
+                }
+            }, 1000)
+        },
+        async setLastClock() {
+            let token = this.getToken;
+            console.log(token);
+            const response = await getLastClockByUserId(25, token);
+            console.log(response.data.data[0].status);
+            if (response.data.data[0].status == true) {
+                this.clockIn = !response.data.data[0].status;
+                this.beginDate = response.data.data[0].time;
+                this.title = 'Working';
+                console.log(response.data);
+            } else {
+                this.title = 'Resting';
+            }
+        },
     },
-    mounted: function () {
-        setInterval(() => {
-            this.time = moment().format("HH:mm")
-        }, 1000)
-    }
+    mounted() {
+        this.startInterval();
+        this.setLastClock();
+    },
 }
 </script>
 
@@ -110,24 +161,46 @@ h1 {
     justify-content: center;
     left: 0;
     top: 0;
-    color: #5a5a5a;
+    color: #3464B5;
     transition: .5s;
     text-align: center;
     font-family: 'Outfit', sans-serif;
     transition: box-shadow 0.5s ease-in-out;
 }
 
-#datetime:hover{
+#datetime:hover {
     box-shadow: 4px 9px 24px 0px #9C9C9C;
 }
 
+#time-passed {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+    color: #3464B5;
+}
+
 #timePassedStyle {
+    width: 175px;
     display: flex;
     flex-direction: row;
     flex: 1;
     font-size: 40px;
-    margin-right: 20px;
+    margin-right: 0px;
     margin-left: 20px;
+}
+
+#secondsPassedStyle {
+    color: #91b9ff;
+    width: 20px;
+    bottom: 7px;
+    right: 38px;
+    display: flex;
+    position: absolute;
+    flex-direction: row;
+    flex: 2;
+    margin-left: 3px;
+    align-items: center;
+    justify-content: space-between;
 }
 
 #timeStyle {
@@ -188,6 +261,10 @@ button:active {
     /*  filter: grayscale(60%); */
 }
 
+#status {
+    color: #3464B5;
+}
+
 #statusColorContainer {
     height: 100%;
     position: relative;
@@ -205,6 +282,4 @@ button:active {
     margin-left: 20px;
     box-shadow: var(--boxShadowStatus);
 }
-
-#buttonStyle {}
 </style>

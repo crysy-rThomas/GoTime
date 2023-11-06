@@ -8,14 +8,16 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ClockService {
-  Future<List<ClockModel>> getMyClocks() async {
+  Future<List<ClockModel>> getMyClocks(int? id) async {
+    log(id.toString());
     const FlutterSecureStorage storage = FlutterSecureStorage();
     final String? token = await storage.read(key: 'access_token');
-    int? myId = int.tryParse(await storage.read(key: 'id') ?? "-1");
+    int? myId = id;
+    myId ??= int.tryParse(await storage.read(key: 'id') ?? "-1");
     try {
       final res = await Dio()
           .get(
-        'https://timemanager-epitech-mpl.gigalixirapp.com/api/clock/user/$myId',
+        'https://timemanager-epitech-mpl.gigalixirapp.com/api/clocks/user/$myId',
         options: Options(
           headers: {
             "Authorization": "Bearer $token",
@@ -47,19 +49,20 @@ class ClockService {
     }
   }
 
-  Future<String> clockInOrOut(int id, bool status, String description) async {
+  Future<String> clockInOrOut(
+      int id, bool status, String description, DateTime date) async {
     const FlutterSecureStorage storage = FlutterSecureStorage();
     final String? token = await storage.read(key: 'access_token');
     try {
       final res = await Dio()
           .post(
-        'https://timemanager-epitech-mpl.gigalixirapp.com/api/clock',
+        'https://timemanager-epitech-mpl.gigalixirapp.com/api/clocks',
         data: {
           "clock": {
             "status": status,
             "description": description,
             "user": id,
-            "time": DateFormat("yyyy-MM-dd hh:mm").format(DateTime.now())
+            "time": DateFormat("yyyy-MM-dd HH:mm").format(date),
           }
         },
         options: Options(

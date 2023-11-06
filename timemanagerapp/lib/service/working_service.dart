@@ -6,12 +6,14 @@ import 'package:timemanagerapp/model/user_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:timemanagerapp/model/working_model.dart';
 
 class WorkingService {
-  Future<List<ClockModel>> getMyClocks() async {
+  Future<List<WorkingModel>> getMyWorkingTimes(int? id) async {
     const FlutterSecureStorage storage = FlutterSecureStorage();
     final String? token = await storage.read(key: 'access_token');
-    int? myId = int.tryParse(await storage.read(key: 'id') ?? "-1");
+    int? myId = id;
+    myId ??= int.tryParse(await storage.read(key: 'id') ?? "-1");
     try {
       final res = await Dio()
           .get(
@@ -32,15 +34,15 @@ class WorkingService {
       if (res.statusCode != 200) {
         return [];
       }
-      List<ClockModel> clocks = [];
-      for (var clock in res.data['data']) {
-        clocks.add(ClockModel.fromJson(clock));
+      List<WorkingModel> workingTimes = [];
+      for (var workingTime in res.data['data']) {
+        workingTimes.add(WorkingModel.fromJson(workingTime));
       }
 
-      return clocks;
+      return workingTimes;
     } catch (e) {
       if (kDebugMode) {
-        log("getAllClocks");
+        log("getAllWorkingTimes");
         log(e.toString());
       }
       return [];

@@ -102,7 +102,18 @@ defmodule Timemanager.Workingtimes do
     Workingtime.changeset(workingtime, attrs)
   end
 
+  @doc """
+  Returns the workingtime from the user.
+
+  ## Examples
+
+      iex> get_working_from_user(1)
+      [%Workingtime{}, ...]
+
+  """
   def get_working_from_user(id) do
+    IO.inspect("------------User found5----------------")
+    IO.inspect(id)
     from(c in Workingtime, where: c.user == ^id) |> Repo.all()
   end
 end

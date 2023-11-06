@@ -25,8 +25,10 @@ defmodule TimemanagerWeb.Router do
 
     resources("/roles", RoleController, except: [:new, :edit])
     resources("/users", UserController, except: [:new, :edit])
-    resources("/clock", ClockController, except: [:new, :edit, :index])
-    get("/clock/user/:id", ClockController, :show_clocks_from_user_id)
+    resources("/clocks", ClockController, except: [:new, :edit, :index])
+    get("/clocks/user/last", ClockController, :get_last_clock_with_token)
+    get("/clocks/user/:id", ClockController, :show_clocks_from_user_id)
+    get("/clocks/user/last/:id", ClockController, :get_last_clock)
     resources("/working", WorkingtimeController, except: [:new, :edit])
     get("/working/user/:id", WorkingtimeController, :show_working_from_user_id)
     post("/login", UserController, :login)
@@ -35,6 +37,7 @@ defmodule TimemanagerWeb.Router do
   scope "/", TimemanagerWeb do
     pipe_through(:api_without_token)
     post("/login", LoginController, :login)
+    post("/register", UserController, :create)
   end
 
 

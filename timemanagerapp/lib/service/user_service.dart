@@ -10,7 +10,6 @@ class UserService {
   Future<List<UserModel>> getAllUsers() async {
     const FlutterSecureStorage storage = FlutterSecureStorage();
     final String? token = await storage.read(key: 'access_token');
-    print(token);
     try {
       final res = await Dio()
           .get(
@@ -76,6 +75,39 @@ class UserService {
         log(e.toString());
       }
       return null;
+    }
+  }
+
+  Future<bool> deleteUser(int id) async {
+    const FlutterSecureStorage storage = FlutterSecureStorage();
+    final String? token = await storage.read(key: 'access_token');
+    try {
+      final res = await Dio()
+          .delete(
+        'https://timemanager-epitech-mpl.gigalixirapp.com/api/users/$id',
+        options: Options(
+          headers: {
+            "Authorization": "Bearer $token",
+          },
+        ),
+      )
+          .onError((DioError error, stackTrace) async {
+        return Response(
+          requestOptions: RequestOptions(path: ''),
+          statusCode: error.response?.statusCode ?? 0,
+          data: error.response?.data ?? {},
+        );
+      });
+      if (res.statusCode != 200 && res.statusCode != 204) {
+        return false;
+      }
+      return true;
+    } catch (e) {
+      if (kDebugMode) {
+        log("getUser");
+        log(e.toString());
+      }
+      return false;
     }
   }
 }
