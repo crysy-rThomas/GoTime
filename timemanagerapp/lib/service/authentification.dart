@@ -90,6 +90,14 @@ class Authentification {
     await (const FlutterSecureStorage()).delete(key: 'loggedIn');
   }
 
+  Future<void> deleteAccount() async {
+    int? myId = int.tryParse(await (const FlutterSecureStorage()).read(key: 'id') ?? "-1");
+    if (myId != null) {
+      await UserService().deleteUser(myId);
+    }
+    await (const FlutterSecureStorage()).deleteAll();
+  }
+
   Future<bool> isSignedIn() async {
     String? loggedIn =
         await (const FlutterSecureStorage()).read(key: 'loggedIn');

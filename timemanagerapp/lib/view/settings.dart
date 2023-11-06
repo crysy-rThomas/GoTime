@@ -6,6 +6,7 @@ import 'package:timemanagerapp/model/user_model.dart';
 import 'package:timemanagerapp/service/authentification.dart';
 import 'package:timemanagerapp/service/user_service.dart';
 import 'package:timemanagerapp/utils/alert_deconnect.dart';
+import 'package:timemanagerapp/utils/alert_delete.dart';
 import 'package:timemanagerapp/utils/number_utils.dart';
 import 'package:timemanagerapp/utils/show_snack_bar.dart';
 import 'package:timemanagerapp/utils/user_small_info.dart';
@@ -23,10 +24,14 @@ class _SettingsState extends State<Settings> {
   bool notifications = false;
   UserModel? user;
   bool faceId = false;
+  String? email;
+  String? password;
 
   getEverything() async {
     String? notif = await storage.read(key: 'notifications');
     String? face = await storage.read(key: 'faceId');
+    email = await storage.read(key: 'email');
+    password = await storage.read(key: 'password');
     int? myId = int.tryParse(await storage.read(key: 'id') ?? "-1");
     if (myId != null && myId != -1) {
       user = await UserService().getUser(myId);
@@ -98,14 +103,14 @@ class _SettingsState extends State<Settings> {
                       padding: const EdgeInsets.only(left: 16.0),
                       child: UserSmallInfo(
                         title: "Firstname",
-                        data: user?.firstname ?? "-",
+                        data: email ?? '-',
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 16.0),
                       child: UserSmallInfo(
                         title: "Lastname",
-                        data: user?.lastname ?? '-',
+                        data: password ?? '-',
                       ),
                     ),
                     Padding(
@@ -310,6 +315,42 @@ class _SettingsState extends State<Settings> {
                     "Log out",
                     style: TextStyle(
                       color: Color.fromRGBO(52, 2, 108, 1),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 32),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: ElevatedButton(
+                  onPressed: () async {
+                    bool res = await showDialog(
+                      context: context,
+                      builder: (context) {
+                        return alertDelete(context);
+                      },
+                    );
+                    if (res) {
+                      await Authentification().deleteAccount();
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, '/', (route) => false);
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    elevation: 0,
+                    splashFactory: NoSplash.splashFactory,
+                    enableFeedback: false,
+                  ),
+                  child: const Text(
+                    "Delete my account",
+                    style: TextStyle(
+                      color: Colors.red,
                       fontWeight: FontWeight.w500,
                       fontSize: 16,
                     ),
