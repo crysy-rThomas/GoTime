@@ -3,6 +3,7 @@ defmodule TimemanagerWeb.WorkingtimeController do
 
   alias Timemanager.Workingtimes
   alias Timemanager.Workingtimes.Workingtime
+  alias Timemanager.Users
 
   alias Timemanager.Users
 
@@ -22,7 +23,6 @@ defmodule TimemanagerWeb.WorkingtimeController do
     with {:ok, %Workingtime{} = workingtime} <- Workingtimes.create_workingtime(workingtime_params) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", ~p"/api/workingtimes/#{workingtime}")
       |> render(:show, workingtime: workingtime)
     end
   end

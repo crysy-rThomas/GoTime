@@ -4,8 +4,6 @@ defmodule Timemanager.Tokens do
   """
   import Plug.Conn
   alias Timemanager.Tokens
-
-  alias Timemanager.Tokens.Token
   alias Timemanager.Users
 
 
@@ -116,8 +114,6 @@ defmodule Timemanager.Tokens do
           else
               {:ok, token_age}
           end
-        nil ->
-          {:error, "Token invalid"}
       end
     else
       {:ok, token}
