@@ -55,7 +55,7 @@ defmodule Timemanager.Tokens do
             check_token_age(decoded_token, conn)
             user = Users.get_user(decoded_token["user_id"])
             case user do
-              {:ok, ^user}
+              {:ok, user}
               ->
                 decoded_token
               {:error, _reason} ->
@@ -84,7 +84,7 @@ defmodule Timemanager.Tokens do
             check_token_age(decoded_token, conn)
             user = Users.get_user(decoded_token["user_id"])
             case user do
-              {:ok, ^user}
+              {:ok, user}
               ->
                 conn
               {:error, _reason} ->

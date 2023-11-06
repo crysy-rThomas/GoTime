@@ -22,7 +22,7 @@ defmodule TimemanagerWeb.ClockController do
       -1 ->
         token = Timemanager.Tokens.get_decoded_token(conn)
         id = token["user_id"]
-        ^clock_params = Map.put(clock_params, "user", id)
+        clock_params = Map.put(clock_params, "user", id)
       _ ->
         clock_params
     end
