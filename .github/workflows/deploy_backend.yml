@@ -2,9 +2,9 @@ name: Deploy Backend
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "deployBack" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "deployBack" ]
 jobs:
   docker:
     runs-on: ubuntu-latest
