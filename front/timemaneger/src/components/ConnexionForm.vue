@@ -35,6 +35,7 @@
 <script>
 import { login } from '@/services/userService';
 import { mapMutations } from "vuex";
+import { getUser } from '@/services/userService';
 
 export default {
   name: 'ConnexionForm',
@@ -45,12 +46,15 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["setToken", "setUserId"]),
+    ...mapMutations(["setToken", "setUserId", "setUserRole"]),
     async handleSubmit() {
       try {
         const response = await login(this.email, this.password);
         if (response.data.data.token != null && response.data.data) {
           this.setToken(response.data.data.token);
+          this.setUserId(response.data.data.id);
+          const userResponse = await getUser(response.data.data.id, response.data.data.token);
+          this.setUserRole(userResponse.data.data.role);
           console.log(response.data.data.token);
           this.$router.push("/home");
         }

@@ -20,8 +20,8 @@ export const getAllClocksByUserId = (userId) => {
   // return axios.get(`${BASE_URL}/clocks/user/${userId}`);
 };
 
-export const getLastClockByUserId = (userId, token) => {
-  return axios.get(`${BASE_URL}/clocks/user/last/${userId}`, {
+export const getLastClockByUserId = (token) => {
+  return axios.get(`${BASE_URL}/clocks/user/last`, {
     headers: {
       Authorization: "Bearer " + token,
     },
@@ -48,12 +48,9 @@ export const addClock = (status, datetime, description, token) => {
 };
 
 export const getClocks = (token) => {
-  return axios.get(
-    `${BASE_URL}/clocks/user`,
-    {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    }
-  );
+  return axios.get(`${BASE_URL}/clocks/user`, {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
 };

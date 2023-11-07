@@ -92,7 +92,9 @@ export default {
         },
         async setLastClock() {
             let token = this.getToken;
-            const response = await getLastClockByUserId(25, token);
+            console.log(token);
+            const response = await getLastClockByUserId(token);
+            console.log(response.data.data[0].status);
             if (response.data.data[0].status == true) {
                 this.clockIn = !response.data.data[0].status;
                 this.beginDate = response.data.data[0].time;
@@ -100,6 +102,8 @@ export default {
                 console.log(response.data);
             } else {
                 this.title = 'Resting';
+                this.statusColor = '#aa0000';
+                this.boxShadowStatus = '0px 0px 45px 5px #aa0000';
             }
         },
     },
