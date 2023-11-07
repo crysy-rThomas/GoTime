@@ -5,19 +5,14 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
 jobs:
-  build:
-
-    name: Deploy
+  docker:
     runs-on: ubuntu-latest
-    env:
-      name: staging
-      url: https://$GIGALIXIR_APP_NAME-staging.gigalixirapp.com
+    if: github.event.pull_request.merged
     steps:
-    - uses: actions/checkout@v3
-    - name: Setting git remote
-      run: git remote remove origin && git init && git remote add gigalixir https://rickdep1999%40gmail.com:fff8cc5b-28b1-41f2-bdf8-628317f103a8@git.gigalixir.com/timemanager-epitech-mpl.git
-    - name: Pushing
-      run: git push -f gigalixir HEAD:refs/heads/main
+      - uses: actions/checkout@v1
+      - run: sudo pip install gigalixir --ignore-installed six
+      - run: gigalixir login -e "rickdep1999%40gmail.com" -y -p "richard99"
+      - run: gigalixir git:remote timemanager-epitech-mpl	
+      - run: git push -f gigalixir HEAD:refs/heads/main
     
