@@ -17,5 +17,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Docker compose up
-        run: docker-compose up --build
+        run: docker compose -f ./docker-compose.yml logs 
       - run: echo "🍏 This job's status is ${{ job.status }}."
