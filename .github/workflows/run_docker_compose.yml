@@ -14,7 +14,7 @@ on:
 jobs:
   all:
     name: Run docker compose
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - name: Docker compose up
         run: docker-compose up --build
