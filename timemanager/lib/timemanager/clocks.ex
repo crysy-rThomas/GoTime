@@ -128,4 +128,11 @@ defmodule Timemanager.Clocks do
   def get_clocks_from_user(id) do
     from(c in Clock, where: c.user == ^id) |> Repo.all()
   end
+
+  @doc """
+  Returns the clocks from a user in a date interval.
+  """
+  def get_clocks_user_from_date_interval(start_date, end_date,user_id) do
+    from(c in Clock, where: c.user == ^user_id and c.time >= ^start_date and c.time <= ^end_date) |> Repo.all()
+  end
 end

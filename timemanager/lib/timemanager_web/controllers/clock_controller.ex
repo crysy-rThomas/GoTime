@@ -17,6 +17,7 @@ defmodule TimemanagerWeb.ClockController do
   end
 
 
+
   defp get_client(conn, clock_params) do
     case clock_params["user"] do
       -1 ->
@@ -151,5 +152,17 @@ defmodule TimemanagerWeb.ClockController do
         |> render(:error, error: "Could not find user with id #{id}")
     end
   end
+
+  @doc """
+    Get clocks from user with id user from token between start_date and end_date
+  """
+  def get_clocks_form_date_interval(conn, %{"start_date" => start_date, "end_date" => end_date}) do
+    id = Timemanager.Tokens.get_decoded_token(conn)["user_id"]
+    clocks = Clocks.get_clocks_user_from_date_interval(start_date, end_date, id)
+    conn
+    |> put_status(:ok)
+    |> render(:index, clocks: clocks)
+  end
+
 
 end

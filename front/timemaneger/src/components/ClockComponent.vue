@@ -57,11 +57,8 @@ export default {
     methods: {
         async clockChange() {
             this.clockIn = !this.clockIn;
-            // let userId = this.getUserId
             let token = this.getToken;
-            console.log(token);
             try {
-                // if (userId != 0) {
                 if (!this.clockIn) {
                     this.title = 'Working';
                     this.statusColor = '#34a300';
@@ -76,7 +73,6 @@ export default {
                     await addClock(!this.clockIn, moment().format("YYYY-MM-DD HH:mm"), "Clock Out", token);
 
                 }
-                // }
             } catch (e) {
                 console.error('Error adding clock:', e);
             }
@@ -96,9 +92,7 @@ export default {
         },
         async setLastClock() {
             let token = this.getToken;
-            console.log(token);
             const response = await getLastClockByUserId(25, token);
-            console.log(response.data.data[0].status);
             if (response.data.data[0].status == true) {
                 this.clockIn = !response.data.data[0].status;
                 this.beginDate = response.data.data[0].time;
@@ -118,7 +112,6 @@ export default {
 
 <style>
 :root {
-    /* Theme */
     --primary-color: #365eaa;
     --light-color: #d0dffc;
     --dark-color: #202d50;

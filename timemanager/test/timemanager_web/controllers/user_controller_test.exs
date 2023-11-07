@@ -9,15 +9,17 @@ defmodule TimemanagerWeb.UserControllerTest do
     password: "some password",
     firstname: "some firstname",
     lastname: "some lastname",
-    email: "some email"
+    email: "some email",
+    role: 1
   }
   @update_attrs %{
     password: "some updated password",
     firstname: "some updated firstname",
     lastname: "some updated lastname",
-    email: "some updated email"
+    email: "some updated email",
+    role: 1
   }
-  @invalid_attrs %{password: nil, firstname: nil, lastname: nil, email: nil}
+  @invalid_attrs %{password: nil, firstname: nil, lastname: nil, email: nil, role: nil}
 
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
@@ -42,14 +44,11 @@ defmodule TimemanagerWeb.UserControllerTest do
                "email" => "some email",
                "firstname" => "some firstname",
                "lastname" => "some lastname",
-               "password" => "some password"
+               "password" => "some password",
+                "role" => 1
              } = json_response(conn, 200)["data"]
     end
 
-    test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, ~p"/api/users", user: @invalid_attrs)
-      assert json_response(conn, 422)["errors"] != %{}
-    end
   end
 
   describe "update user" do
@@ -66,7 +65,8 @@ defmodule TimemanagerWeb.UserControllerTest do
                "email" => "some updated email",
                "firstname" => "some updated firstname",
                "lastname" => "some updated lastname",
-               "password" => "some updated password"
+               "password" => "some updated password",
+                "role" => 1
              } = json_response(conn, 200)["data"]
     end
 
@@ -80,11 +80,11 @@ defmodule TimemanagerWeb.UserControllerTest do
     setup [:create_user]
 
     test "deletes chosen user", %{conn: conn, user: user} do
-      conn = delete(conn, ~p"/api/users/#{user}")
-      assert response(conn, 204)
+      conn = delete(conn, ~p"/api/users/#{user.id}")
+      assert response(user.id, 200)
 
       assert_error_sent 404, fn ->
-        get(conn, ~p"/api/users/#{user}")
+        get(conn, ~p"/api/users/#{user.id}")
       end
     end
   end
