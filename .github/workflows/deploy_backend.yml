@@ -13,5 +13,5 @@ jobs:
       - run: sudo pip install gigalixir --ignore-installed six
       - run: gigalixir login -e "rickdep1999@gmail.com" -y -p "richard99"
       - run: gigalixir git:remote timemanager-epitech-mpl	
-      - run: git push -f gigalixir HEAD:refs/heads/main
+      - run: git push gigalixir
     
