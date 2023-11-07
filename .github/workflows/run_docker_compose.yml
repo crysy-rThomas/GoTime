@@ -16,6 +16,7 @@ jobs:
     name: Run docker compose
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Docker compose up
         run: docker compose -f ./docker-compose.yml logs 
       - run: echo "🍏 This job's status is ${{ job.status }}."
