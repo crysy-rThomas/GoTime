@@ -25,5 +25,5 @@ jobs:
     - name: Setting git remote
       run: gigalixir git:remote timemanager-epitech-mpl-b45bb89c-jt48r-staging
     - name: Pushing
-      run: git push -f gigalixir HEAD:refs/heads/master
+      run: git push -f gigalixir HEAD:refs/heads/main
     
