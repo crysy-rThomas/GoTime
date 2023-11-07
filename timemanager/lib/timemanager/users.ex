@@ -7,6 +7,7 @@ defmodule Timemanager.Users do
   alias Timemanager.Repo
   alias Timemanager.Users.User
 
+
   @doc """
   Returns the list of users.
 
@@ -137,6 +138,4 @@ defmodule Timemanager.Users do
     IO.inspect(email)
     Repo.get_by(User, email: email)
   end
-
-
 end
