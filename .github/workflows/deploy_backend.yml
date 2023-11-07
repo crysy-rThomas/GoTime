@@ -17,7 +17,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Setting git remote
-      run: git remote add gigalixir https://rickdep1999%40gmail.com:fff8cc5b-28b1-41f2-bdf8-628317f103a8@git.gigalixir.com/timemanager-epitech-mpl.git
+      run: git remote remove origin && git init && git remote add gigalixir https://rickdep1999%40gmail.com:fff8cc5b-28b1-41f2-bdf8-628317f103a8@git.gigalixir.com/timemanager-epitech-mpl.git
     - name: Pushing
       run: git push -f gigalixir HEAD:refs/heads/main
     
