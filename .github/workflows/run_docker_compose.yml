@@ -11,13 +11,11 @@ on:
   pull_request:
     branches: [ "main" ]
 
-permissions:
-  contents: read
-
 jobs:
   all:
-    name: My test
+    name: Run docker compose
     runs-on: ubuntu-18.04
     steps:
       - name: Docker compose up
         run: docker-compose up --build
+      - run: echo "🍏 This job's status is ${{ job.status }}."
