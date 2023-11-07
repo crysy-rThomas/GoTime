@@ -1,0 +1,27 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    name: Deploy
+    runs-on: ubuntu-latest
+    env:
+      name: staging
+      url: https://$GIGALIXIR_APP_NAME-staging.gigalixirapp.com
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install dependencies
+      run: echo "Deploy to staging server" && apt-get update && apt-get install -y python-pip git && pip install gigalixir
+    - name: Logging into gigalixir
+      run: gigalixir login -e "rickdep1999@gmail.com" -y -p "richard99"
+    - name: Setting git remote
+      run: gigalixir git:remote timemanager-epitech-mpl-b45bb89c-jt48r-staging
+    - name: Pushing
+      run: git push -f gigalixir HEAD:refs/heads/master
+    
