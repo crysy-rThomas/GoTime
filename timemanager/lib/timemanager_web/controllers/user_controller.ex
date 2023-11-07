@@ -38,6 +38,29 @@ defmodule TimemanagerWeb.UserController do
         end
 
   end
+
+
+  # @doc """
+  # return the current user information
+  # """
+  # def me(conn,_params) do
+  #   decoded_token = Timemanager.Tokens.get_decoded_token(conn)
+  #   id = decoded_token["user_id"]
+  #   user = Users.get_user(id)
+  #   case user do
+  #     {:ok, res} ->
+  #       user
+
+  #     {:error, _reason} ->
+  #       conn
+  #       |> put_status(:ok)
+  #       |> render(:error, error: "Could not find user with id #{id}")
+  #   end
+  # end
+
+
+
+
   @doc """
   Show a specific user.
   """
@@ -104,4 +127,6 @@ defmodule TimemanagerWeb.UserController do
         |> render(:error, error: "Could not find user with id #{id}")
     end
   end
+
+
 end
