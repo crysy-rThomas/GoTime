@@ -11,14 +11,20 @@
           <!--logo-->
           <img id="logo" src="../assets/png/logo-no-background.png">
           <form @submit.prevent="handleSubmit">
-            <label for="email">Email :</label>
-            <input type="text" name="email" v-model="email">
-            <label for="password">Password :</label>
-            <input type="password" name="password" v-model="password">
-            <p>don't have an account yet? you can
-              <router-link to="/register"><a href="">register here</a></router-link>
-            </p>
-            <input type="submit" value="Submit" name="Submit">
+            <div id="inputs">
+                <div class="input-group">
+                  <label for="email">Email :</label>
+                  <input type="text" name="email" v-model="email">
+                </div>
+                <div class="input-group">
+                  <label for="password">Password :</label>
+                  <input type="password" name="password" v-model="password">
+                </div>
+                <p>don't have an account yet? you can
+                  <router-link to="/register"><a href="">register here</a></router-link>
+                </p>
+                <input type="submit" value="Submit" name="Submit">
+            </div>
           </form>
         </div>
       </div>

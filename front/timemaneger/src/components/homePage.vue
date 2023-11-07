@@ -54,7 +54,7 @@
 <style>
     #main-content{
         margin-left: 120px;
-        padding-top: 50px;
+        padding-top: 40px;
     }
     #graphs, #second-row{
         display: flex;

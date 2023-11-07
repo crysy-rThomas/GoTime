@@ -55,7 +55,6 @@ export default {
           return;
         }
 
-        console.log(rawClocks);
 
         // This will give us the start of the week (Sunday)
         const startOfTheWeek = this.getStartOfTheWeek(new Date());
@@ -64,11 +63,27 @@ export default {
         const now = new Date();
         now.setHours(0, 0, 0, 0); // Remove the time part for a proper date comparison
 
+        console.log(`Total clocks before filtering: ${rawClocks.length}`);
+
+        console.log(rawClocks);
+
         const clocksThisWeek = rawClocks.filter(clock => {
+          console.log(clock);
           const clockDate = new Date(clock.time);
-          clockDate.setHours(0, 0, 0, 0); // Remove the time part for a proper date comparison
-          return clockDate >= startOfTheWeek && clockDate <= now;
+          clockDate.setHours(0, 0, 0, 0); // Normalize clock date for comparison
+
+          const now = new Date(); // Current date and time
+          const endOfDay = new Date(now); // Create a new date object for the end of the day
+          endOfDay.setHours(23, 59, 59, 999); // Set to the last millisecond of the current day
+
+          // Ensure that the console log shows the right values for debugging
+          console.log(`Comparing clock date: ${clockDate.toISOString()} with start of the week: ${startOfTheWeek.toISOString()} and end of day: ${endOfDay.toISOString()}`);
+
+          // Check if the clock date is on or after the start of the week and on or before the end of the current day
+          return clockDate >= startOfTheWeek && clockDate <= endOfDay;
         });
+
+
 
         console.log("clocks this week:", clocksThisWeek);
 
@@ -90,9 +105,6 @@ export default {
         if (this.$refs.lineChart && typeof this.$refs.lineChart.update === 'function') {
           this.chartDataReady = true;
           this.$refs.lineChart.update();
-          console.log("hello");
-        }else{
-          console.log("HEHEHE")
         }
         this.chartDataReady = true;
 
@@ -102,9 +114,10 @@ export default {
     },
 
     getStartOfTheWeek(date) {
-      const day = date.getDay();
-      const diff = date.getDate() - day + (day === 0 ? -6 : 1);
-      return new Date(date.setDate(diff));
+      const result = new Date(date); // This should be the current date when called
+      result.setDate(result.getDate() - result.getDay()); // Adjust to the previous Sunday
+      result.setHours(0, 0, 0, 0); // Set time to the very start of the day
+      return result;
     },
     groupClocksByDay(clocks) {
       const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
