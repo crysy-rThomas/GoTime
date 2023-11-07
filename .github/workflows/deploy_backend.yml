@@ -16,8 +16,12 @@ jobs:
       url: https://$GIGALIXIR_APP_NAME-staging.gigalixirapp.com
     steps:
     - uses: actions/checkout@v3
+    - name: Update dependencies
+      run:  apt-get update
     - name: Install dependencies
-      run: echo "Deploy to staging server" && apt-get update && apt-get install -y python-pip git && pip install gigalixir
+      run: apt-get install -y python-pip git
+    - name: Install gigalixir
+      run: pip install gigalixir
     - name: Logging into gigalixir
       run: gigalixir login -e "rickdep1999@gmail.com" -y -p "richard99"
     - name: Setting git remote
