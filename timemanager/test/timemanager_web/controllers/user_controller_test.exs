@@ -44,11 +44,14 @@ defmodule TimemanagerWeb.UserControllerTest do
                "email" => "some email",
                "firstname" => "some firstname",
                "lastname" => "some lastname",
-               "password" => "some password",
-                "role" => 1
+               "password" => "some password"
              } = json_response(conn, 200)["data"]
     end
 
+    test "renders errors when data is invalid", %{conn: conn} do
+      conn = post(conn, ~p"/api/users", user: @invalid_attrs)
+      assert json_response(conn, 422)["errors"] != %{}
+    end
   end
 
   describe "update user" do
@@ -65,8 +68,7 @@ defmodule TimemanagerWeb.UserControllerTest do
                "email" => "some updated email",
                "firstname" => "some updated firstname",
                "lastname" => "some updated lastname",
-               "password" => "some updated password",
-                "role" => 1
+               "password" => "some updated password"
              } = json_response(conn, 200)["data"]
     end
 
@@ -80,11 +82,11 @@ defmodule TimemanagerWeb.UserControllerTest do
     setup [:create_user]
 
     test "deletes chosen user", %{conn: conn, user: user} do
-      conn = delete(conn, ~p"/api/users/#{user.id}")
-      assert response(user.id, 200)
+      conn = delete(conn, ~p"/api/users/#{user}")
+      assert response(conn, 204)
 
       assert_error_sent 404, fn ->
-        get(conn, ~p"/api/users/#{user.id}")
+        get(conn, ~p"/api/users/#{user}")
       end
     end
   end
