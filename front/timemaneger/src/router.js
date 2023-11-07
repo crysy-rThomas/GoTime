@@ -7,6 +7,7 @@ import RegisterForm from '@/components/RegisterForm.vue'
 import WeatherSearch from '@/components/WeatherSearch.vue'
 import homePage from '@/components/homePage.vue'
 import personalInformation from '@/components/persoInfo'
+import bagelChart from '@/components/bagelChart'
 
 const routes = [
   {
@@ -33,6 +34,11 @@ const routes = [
     path: '/register',
     name: 'RegisterForm',
     component: RegisterForm
+  },
+  {
+    path: '/BagelTest',
+    name: 'bagelChart',
+    component: bagelChart
   },
   {
     path: '/weatherSeach',
