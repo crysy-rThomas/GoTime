@@ -16,14 +16,8 @@ jobs:
       url: https://$GIGALIXIR_APP_NAME-staging.gigalixirapp.com
     steps:
     - uses: actions/checkout@v3
-    - name: Install dependencies
-      run: sudo apt-get install -y python3-pip git
-    - name: Install gigalixir
-      run: sudo pip install gigalixir
-    - name: Logging into gigalixir
-      run: gigalixir login -e "rickdep1999@gmail.com" -y -p "richard99"
     - name: Setting git remote
-      run: gigalixir git:remote timemanager-epitech-mpl-b45bb89c-jt48r-staging
+      run: git remote add gigalixir https://rickdep1999%40gmail.com:fff8cc5b-28b1-41f2-bdf8-628317f103a8@git.gigalixir.com/timemanager-epitech-mpl.git
     - name: Pushing
       run: git push -f gigalixir HEAD:refs/heads/main
     
