@@ -3,6 +3,7 @@ defmodule Timemanager.UsersFixtures do
   This module defines test helpers for creating
   entities via the `Timemanager.Users` context.
   """
+  import Timemanager.RolesFixtures
 
   @doc """
   Generate a user.
@@ -15,7 +16,7 @@ defmodule Timemanager.UsersFixtures do
         firstname: "some firstname",
         lastname: "some lastname",
         password: "some password",
-        role: 1
+        role: role_fixture().id
       })
       |> Timemanager.Users.create_user()
 
