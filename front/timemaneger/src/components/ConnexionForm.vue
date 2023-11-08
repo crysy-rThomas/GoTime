@@ -20,7 +20,7 @@
                   <label for="password">Password :</label>
                   <input type="password" name="password" v-model="password">
                 </div>
-                <p>don't have an account yet? you can
+                <p>don't have an account yet? you can 
                   <router-link to="/register"><a href="">register here</a></router-link>
                 </p>
                 <input type="submit" value="Submit" name="Submit">
@@ -35,7 +35,6 @@
 <script>
 import { login } from '@/services/userService';
 import { mapMutations } from "vuex";
-import { getUser } from '@/services/userService';
 
 export default {
   name: 'ConnexionForm',
@@ -46,15 +45,12 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["setToken", "setUserId", "setUserRole"]),
+    ...mapMutations(["setToken", "setUserId"]),
     async handleSubmit() {
       try {
         const response = await login(this.email, this.password);
         if (response.data.data.token != null && response.data.data) {
           this.setToken(response.data.data.token);
-          this.setUserId(response.data.data.id);
-          const userResponse = await getUser(response.data.data.id, response.data.data.token);
-          this.setUserRole(userResponse.data.data.role);
           console.log(response.data.data.token);
           this.$router.push("/home");
         }

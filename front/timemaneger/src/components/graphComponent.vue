@@ -63,12 +63,8 @@ export default {
         const now = new Date();
         now.setHours(0, 0, 0, 0); // Remove the time part for a proper date comparison
 
-        console.log(`Total clocks before filtering: ${rawClocks.length}`);
-
-        console.log(rawClocks);
 
         const clocksThisWeek = rawClocks.filter(clock => {
-          console.log(clock);
           const clockDate = new Date(clock.time);
           clockDate.setHours(0, 0, 0, 0); // Normalize clock date for comparison
 
@@ -76,19 +72,13 @@ export default {
           const endOfDay = new Date(now); // Create a new date object for the end of the day
           endOfDay.setHours(23, 59, 59, 999); // Set to the last millisecond of the current day
 
-          // Ensure that the console log shows the right values for debugging
-          console.log(`Comparing clock date: ${clockDate.toISOString()} with start of the week: ${startOfTheWeek.toISOString()} and end of day: ${endOfDay.toISOString()}`);
-
           // Check if the clock date is on or after the start of the week and on or before the end of the current day
           return clockDate >= startOfTheWeek && clockDate <= endOfDay;
         });
 
 
-
-        console.log("clocks this week:", clocksThisWeek);
-
+        console.log(clocksThisWeek);
         const groupedByDay = this.groupClocksByDay(clocksThisWeek);
-
         console.log(groupedByDay);
 
         // Set labels for all days up to today
@@ -98,8 +88,6 @@ export default {
 
         // Populate the dataset with the grouped data
         this.chartData.datasets[0].data = this.chartData.labels.map(day => groupedByDay[day] || 0);
-
-        console.log(this.chartData);
 
         // Make sure the chart exists before trying to update it
         if (this.$refs.lineChart && typeof this.$refs.lineChart.update === 'function') {
@@ -120,37 +108,44 @@ export default {
       return result;
     },
     groupClocksByDay(clocks) {
-      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-      const grouped = {};
-      
-      // Initialize all days of the week in grouped object
-      days.forEach(day => grouped[day] = []);
+  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const grouped = {};
 
-      // Group the clocks by day
-      clocks.forEach(clock => {
-        const day = days[new Date(clock.time).getDay()];
-        grouped[day].push(clock);
-      });
+  // Initialize all days of the week in grouped object
+  days.forEach(day => grouped[day] = 0);
 
-      // Calculate total hours worked for each day
-      const combinedTimes = days.reduce((acc, day) => {
-        const dayClocks = grouped[day];
-        let totalTime = 0;
+  // Loop through pairs of clock-in and clock-out
+  for (let i = 0; i < clocks.length; i += 2) {
+    const clockIn = clocks[i];
+    const clockOut = clocks[i + 1];
 
-        for (let i = 0; i < dayClocks.length; i += 2) {
-          const clockIn = dayClocks[i];
-          const clockOut = dayClocks[i + 1];
-          if (clockIn && clockOut) {
-            const duration = (new Date(clockOut.time) - new Date(clockIn.time)) / (1000 * 60 * 60);
-            totalTime += duration;
-          }
-        }
-        acc[day] = totalTime;
-        return acc;
-      }, {});
+    if (clockIn && clockOut) {
+      const clockInDate = new Date(clockIn.time);
+      const clockOutDate = new Date(clockOut.time);
 
-      return combinedTimes;
+      // Check if the clock-in and clock-out are on the same day
+      if (clockInDate.toDateString() === clockOutDate.toDateString()) {
+        const duration = (clockOutDate - clockInDate) / (1000 * 60 * 60);
+        grouped[days[clockInDate.getDay()]] += duration;
+      } else {
+        // Handle case where clock-in and clock-out span over two days
+        const midnight = new Date(clockInDate);
+        midnight.setHours(24, 0, 0, 0); // Set to midnight
+
+        // Time before midnight on clock-in day
+        const durationDay1 = (midnight - clockInDate) / (1000 * 60 * 60);
+        grouped[days[clockInDate.getDay()]] += durationDay1;
+
+        // Time after midnight on clock-out day
+        const durationDay2 = (clockOutDate - midnight) / (1000 * 60 * 60);
+        grouped[days[clockOutDate.getDay()]] += durationDay2;
+      }
     }
+  }
+
+  return grouped;
+}
+
   },
   computed: {
     ...mapGetters(["getToken"]),

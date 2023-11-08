@@ -5,7 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "postinstall": "npm run build",
+    "start": "node server.js"
   },
   "dependencies": {
     "axios": "^1.6.0",
@@ -15,6 +17,9 @@
     "jquery": "^3.7.1",
     "jsonwebtoken": "^9.0.2",
     "moment": "^2.29.4",
+    "vue-chartmaker": "^1.4.4",
+    "express": "^4.18.2",
+    "serve-static": "^1.15.0",
     "postcss-svgo": "^6.0.0",
     "vue": "^3.3.7",
     "vue-chart-3": "^3.1.8",

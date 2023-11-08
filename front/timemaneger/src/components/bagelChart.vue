@@ -52,8 +52,6 @@ export default {
                 }
 
                 let rawClocks = response.data.data;
-                console.log("HAHAHAHA");
-                console.log(rawClocks);
                 const startOfTheWeek = this.getStartOfTheWeek(new Date());
                 const now = new Date();
                 now.setHours(0, 0, 0, 0); 
@@ -65,11 +63,6 @@ export default {
                 // Process the clocks to calculate the required hours
                 const { normalHours, missingHours, overtimeHours, nighttimeHours } = this.calculateHours(clocksThisWeek);
                 // Update the chart data
-                console.log(clocksThisWeek);
-                console.log(overtimeHours);
-                console.log(normalHours);
-                console.log(missingHours);
-                console.log(nighttimeHours);
                 this.chartData = {
                     labels: ['Overtime', 'Normal', 'Missing', 'Nightime'],
                     datasets: [{
@@ -90,29 +83,33 @@ export default {
             const totalExpectedHours = 35;
 
             for (let i = 0; i < clocks.length; i += 2) {
-            const clockIn = clocks[i];
-            const clockOut = clocks[i + 1];
+                const clockIn = clocks[i];
+                const clockOut = clocks[i + 1];
 
-            if (clockIn && clockOut && clockIn.status === true && clockOut.status === false) {
-                // Parse the clock-in and clock-out times
-                const clockInTime = new Date(clockIn.time);
-                const clockOutTime = new Date(clockOut.time);
+                if (clockIn && clockOut && clockIn.status === true && clockOut.status === false) {
+                    // Parse the clock-in and clock-out times
+                    const clockInTime = new Date(clockIn.time);
+                    const clockOutTime = new Date(clockOut.time);
 
-                // Calculate total hours worked
-                const hoursWorked = (clockOutTime - clockInTime) / (1000 * 60 * 60); // convert milliseconds to hours
-                if (!isNaN(hoursWorked)) {
-                normalHours += hoursWorked;
+                    // Calculate total hours worked
+                    const hoursWorked = (clockOutTime - clockInTime) / (1000 * 60 * 60); // convert milliseconds to hours
+                    if (!isNaN(hoursWorked)) {
+                    normalHours += hoursWorked;
+                    } else {
+                    // Log the actual objects if hoursWorked is NaN
+                    console.error('Failed to calculate hours worked between:', clockIn, clockOut);
+                    }
+
+                    const nightHours = this.calculateNighttimeHours(clockInTime, clockOutTime);
+                    nighttimeHours += nightHours;
+
+                    // Deduct nighttime hours from normal hours as they are counted separately
+                    normalHours -= nightHours;
                 } else {
-                // Log the actual objects if hoursWorked is NaN
-                console.error('Failed to calculate hours worked between:', clockIn, clockOut);
+                    // Log if there's a mismatch or missing in/out pair
+                    console.error('Mismatched or missing clock pair:', clockIn, clockOut);
                 }
-            } else {
-                // Log if there's a mismatch or missing in/out pair
-                console.error('Mismatched or missing clock pair:', clockIn, clockOut);
             }
-            }
-
-            // nighttimeHours = ...;
 
             // Calculate missing and overtime hours
             normalHours = Math.min(normalHours, totalExpectedHours);
@@ -121,34 +118,42 @@ export default {
 
             return { normalHours, missingHours, overtimeHours, nighttimeHours };
         },
-
-        calculateNighttimeHours(clockIn, clockOut, nightStart, nightEnd) {
+        calculateNighttimeHours(clockIn, clockOut) {
+            const nightStart = 22; // 10 PM
+            const nightEnd = 6; // 6 AM
             let nighttimeHours = 0;
+            let startTime = clockIn.getHours() + clockIn.getMinutes() / 60;
+            let endTime = clockOut.getHours() + clockOut.getMinutes() / 60;
 
-            // Check if clock in is during night time
-            if (clockIn.getHours() >= nightStart || clockIn.getHours() < nightEnd) {
-                // If clock in is before midnight and clock out is after midnight
-                if (clockIn.getHours() >= nightStart && clockOut.getHours() >= nightEnd && clockOut.getDate() > clockIn.getDate()) {
-                nighttimeHours += (24 - clockIn.getHours()) + clockOut.getHours();
-                } else {
-                // Clock in and clock out on the same day
-                nighttimeHours += clockOut.getHours() - clockIn.getHours();
+            // If clock in is before midnight and clock out is after midnight
+            if (startTime >= nightStart || endTime < nightEnd || endTime >= nightStart) {
+                if (startTime < nightStart) startTime = nightStart; // Start counting from nightStart
+                if (endTime >= nightStart) endTime -= 24; // Adjust for crossing midnight
+                
+                // Calculate hours within the nighttime window
+                if (endTime >= nightStart) {
+                    nighttimeHours = nightStart + 24 - startTime; // Before midnight
+                } else if (endTime < nightEnd) {
+                    nighttimeHours += endTime; // After midnight
                 }
             }
 
-            // Normalize the hours in case the period spans over the nightEnd (e.g., 4 AM)
-            if (clockOut.getHours() < nightEnd) {
-                nighttimeHours -= (nightEnd - clockOut.getHours());
+            if (endTime >= nightStart && clockOut.getDate() > clockIn.getDate()) {
+                // If the clock-out is on the next day
+                nighttimeHours += endTime; // After midnight
+                if (startTime < nightStart) {
+                    nighttimeHours += 24 - nightStart + startTime; // Before midnight
+                }
             }
 
-            // If clock in after nightStart, subtract the hours that aren't night time
-            if (clockIn.getHours() > nightStart) {
-                nighttimeHours -= (clockIn.getHours() - nightStart);
+            // Normalize for cases where clock-in is before nightStart and clock-out is after nightEnd
+            if (clockIn.getHours() < nightStart && clockOut.getHours() >= nightEnd && clockOut.getDate() > clockIn.getDate()) {
+                nighttimeHours = (24 - nightStart) + nightEnd;
             }
 
-            // Return the calculated nighttime hours, ensuring it's not negative
-            return Math.max(nighttimeHours, 0);
+            return Math.max(0, nighttimeHours); // Ensure that we don't return negative hours
         },
+
         getStartOfTheWeek(date) {
             const result = new Date(date); // This should be the current date when called
             result.setDate(result.getDate() - result.getDay()); // Adjust to the previous Sunday
@@ -161,7 +166,6 @@ export default {
         },
         mounted() {
             this.fetchAndProcessClocks();
-            console.log("test")
         }
     };
 </script>

@@ -19,9 +19,6 @@ export default createStore({
     setUserId(state, userId) {
       state.userId = userId;
     },
-    setUserRole(state, userRole) {
-      state.userRole = userRole;
-    },
   },
   actions: {},
   getters: {
@@ -33,9 +30,6 @@ export default createStore({
     },
     getToken(state) {
       return state.token;
-    },
-    getUserRole(state) {
-      return state.userRole;
     },
   },
 });
