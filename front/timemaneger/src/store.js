@@ -11,6 +11,7 @@ export default createStore({
   state: {
     token: null,
     userId: null,
+    userRole: 0,
   },
   mutations: {
     setToken(state, token) {

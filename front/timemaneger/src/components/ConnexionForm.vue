@@ -12,6 +12,7 @@
           <img id="logo" src="../assets/png/logo-no-background.png">
           <form @submit.prevent="handleSubmit">
             <div id="inputs">
+<<<<<<< Updated upstream
                 <div class="input-group">
                   <label for="email">Email :</label>
                   <input type="text" name="email" v-model="email">
@@ -24,6 +25,20 @@
                   <router-link to="/register"><a href="">register here</a></router-link>
                 </p>
                 <input type="submit" value="Submit" name="Submit">
+=======
+              <div class="input-group">
+                <label for="email">Email :</label>
+                <input type="text" name="email" v-model="email">
+              </div>
+              <div class="input-group">
+                <label for="password">Password :</label>
+                <input type="password" name="password" v-model="password">
+              </div>
+              <p>don't have an account yet? you can
+                <router-link to="/register"><a href="">register here</a></router-link>
+              </p>
+              <input type="submit" value="Submit" name="Submit">
+>>>>>>> Stashed changes
             </div>
           </form>
         </div>
