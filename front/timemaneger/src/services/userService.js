@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BASE_URL_REGISTER } from "../apiConfig";
+import { BASE_URL_REGISTER, BASE_URL } from "../apiConfig";
 
 export const addUser = (email, firstname, lastname, password) => {
   return axios.post(`${BASE_URL_REGISTER}/register`, {
@@ -13,6 +13,13 @@ export const addUser = (email, firstname, lastname, password) => {
   });
 };
 
+export const getUserById = (IDUser, token) => {
+  return axios.get(`${BASE_URL}/users/${IDUser}`, {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+};
 
 export const getAllUsers = (token) => {
   return axios.get(`${BASE_URL}/users`, {

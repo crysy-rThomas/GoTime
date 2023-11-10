@@ -52,7 +52,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(["getUserId", "getToken"]),
+        ...mapGetters(["getUserId", "getToken", "getViewUserId"]),
     },
     methods: {
         async clockChange() {
@@ -92,14 +92,31 @@ export default {
         },
         async setLastClock() {
             let token = this.getToken;
-            const response = await getLastClockByUserId(25, token);
-            if (response.data.data[0].status == true) {
-                this.clockIn = !response.data.data[0].status;
-                this.beginDate = response.data.data[0].time;
-                this.title = 'Working';
-                console.log(response.data);
+            if (this.getViewUserId != 0) {
+                let OtherUserResponse = await getLastClockByUserId(this.getViewUserId, token);
+                console.log(OtherUserResponse.data.data[0]);
+                if (OtherUserResponse.data.data[0].status == true) {
+                    this.clockIn = !OtherUserResponse.data.data[0].status;
+                    this.beginDate = OtherUserResponse.data.data[0].time;
+                    this.title = 'Working';
+                    console.log(OtherUserResponse.data);
+                } else {
+                    this.title = 'Resting';
+                    this.statusColor = '#aa0000';
+                    this.boxShadowStatus = '0px 0px 45px 5px #aa0000';
+                }
             } else {
-                this.title = 'Resting';
+                let response = await getLastClockByUserId(this.getUserId, token);
+                if (response.data.data[0].status == true) {
+                    this.clockIn = !response.data.data[0].status;
+                    this.beginDate = response.data.data[0].time;
+                    this.title = 'Working';
+                    console.log(response.data);
+                } else {
+                    this.title = 'Resting';
+                    this.statusColor = '#aa0000';
+                    this.boxShadowStatus = '0px 0px 45px 5px #aa0000';
+                }
             }
         },
     },
