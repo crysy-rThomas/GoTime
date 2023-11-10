@@ -21,8 +21,13 @@ docker-compose up --build
 
 Access the frontend at 🌐 `http://localhost:8080` and the backend at 🖥️ `http://localhost:4000`.
 
+
 ## CI/CD Status
-![CI/CD Status](insert-CI-CD-badge-link)
+![Docker-compose status](https://github.com/EpitechMscProPromo2025/T-POO-700-MPL_8/actions/workflows/run_docker_compose.yml/badge.svg)
+
+![Elixir CI](https://github.com/EpitechMscProPromo2025/T-POO-700-MPL_8/actions/workflows/elixir.yml/badge.svg)
+
+![Deploy Backend](https://github.com/EpitechMscProPromo2025/T-POO-700-MPL_8/actions/workflows/deployBack.yml/badge.svg)
 
 The CI/CD pipeline is powered by GitHub Actions. The status above reflects the successful completion of the latest build.
 
