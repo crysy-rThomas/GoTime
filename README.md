@@ -42,3 +42,4 @@ The CI/CD pipeline is powered by GitHub Actions. The status above reflects the s
 If you encounter any issues, ensure that Docker is running and that the necessary ports (4000 for the backend, 8080 for the frontend) are available.
 
 ![Justice League](https://media.tenor.com/u29RQ4A9xsAAAAAC/wonder-woman-batman.gif)
+
