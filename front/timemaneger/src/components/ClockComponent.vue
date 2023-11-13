@@ -99,7 +99,6 @@ export default {
                     this.clockIn = !OtherUserResponse.data.data[0].status;
                     this.beginDate = OtherUserResponse.data.data[0].time;
                     this.title = 'Working';
-                    console.log(response.data.data);
                 } else {
                     this.title = 'Resting';
                     this.statusColor = '#aa0000';
@@ -111,7 +110,6 @@ export default {
                     this.clockIn = !response.data.data[0].status;
                     this.beginDate = response.data.data[0].time;
                     this.title = 'Working';
-                    console.log(response.data);
                 } else {
                     this.title = 'Resting';
                     this.statusColor = '#aa0000';
