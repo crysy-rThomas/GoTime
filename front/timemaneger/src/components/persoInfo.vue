@@ -10,25 +10,6 @@
                     <h4>Role : {{ role }}</h4>
                 </div>
                 <hr class="hr-pi">
-                <div style="margin-top: 45px;">
-                    <table style="margin: auto;" class="paleBlueRows">
-                        <thead>
-                            <tr>
-                                <th>Monday</th>
-                                <th>Tuesday</th>
-                                <th>Wednesday</th>
-                                <th>Thursday</th>
-                                <th>Friday</th>
-                                <th>Saturday</th>
-                                <th>Sunday</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td>cell1_1</td><td>cell2_1</td><td>cell3_1</td><td>cell4_1</td><td>cell5_1</td><td>cell6_1</td><td>cell7_1</td></tr>
-                            <tr><td>cell1_1</td><td>cell2_1</td><td>cell3_1</td><td>cell4_1</td><td>cell5_1</td><td>cell6_1</td><td>cell7_1</td></tr>
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </div>
     </div>
@@ -36,6 +17,8 @@
 
 <script>
     import sideBar from "./sideBar.vue"
+    import { getUserById } from "../services/userService"
+    import { mapGetters } from "vuex";
 
     export default {
         components: {
@@ -43,12 +26,27 @@
         },
         data() {
             return {
-                mail : 'stanislas.selelj@gmail.com',
+                mail : 'stan.selelj@gmail.com',
                 nom : 'SEKELJ',
                 prenom : 'Stanislas',
                 role : 'utilisateur',
             }
-        }
+        },
+        methods: {
+            async getCurrentUserInfo() {
+                let token = this.getToken;
+                try {
+                    const response = await getUserById(token);
+                    return response.data.data || [];
+                } catch (error) {
+                    console.error("Error fetching clocks:", error);
+                    return [];
+                }
+            }
+        },
+        computed: {
+            ...mapGetters(["getToken"]),
+        },
     };
 
 </script>

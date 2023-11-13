@@ -93,10 +93,11 @@ export default {
         async setLastClock() {
             let token = this.getToken;
             if (this.getViewUserId != 0) {
-                const response = await getLastClockByUserId(this.getViewUserId, token);
-                if (response.data.data[0].status == true) {
-                    this.clockIn = !response.data.data[0].status;
-                    this.beginDate = response.data.data[0].time;
+                let OtherUserResponse = await getLastClockByUserId(token);
+                console.log(OtherUserResponse.data.data[0]);
+                if (OtherUserResponse.data.data[0].status == true) {
+                    this.clockIn = !OtherUserResponse.data.data[0].status;
+                    this.beginDate = OtherUserResponse.data.data[0].time;
                     this.title = 'Working';
                     console.log(response.data.data);
                 } else {
@@ -105,7 +106,7 @@ export default {
                     this.boxShadowStatus = '0px 0px 45px 5px #aa0000';
                 }
             } else {
-                const response = await getLastClockByUserId(this.getUserId, token);
+                let response = await getLastClockByUserId(token);
                 if (response.data.data[0].status == true) {
                     this.clockIn = !response.data.data[0].status;
                     this.beginDate = response.data.data[0].time;
