@@ -27,8 +27,6 @@ Access the frontend at 🌐 `http://localhost:8080` and the backend at 🖥️ `
 
 ![Elixir CI](https://github.com/crysy-rThomas/GoTime/actions/workflows/elixir.yml/badge.svg)
 
-![Deploy Backend](https://github.com/crysy-rThomas/GoTime/actions/workflows/deployBack.yml/badge.svg)
-
 The CI/CD pipeline is powered by GitHub Actions. The status above reflects the successful completion of the latest build.
 
 ## Download Gotime
