@@ -11,6 +11,7 @@ export default createStore({
   state: {
     token: null,
     userId: null,
+    userRole: 0,
   },
   mutations: {
     setToken(state, token) {
@@ -18,6 +19,12 @@ export default createStore({
     },
     setUserId(state, userId) {
       state.userId = userId;
+    },
+    setUserRole(state, userRole) {
+      state.userRole = userRole;
+    },
+    setViewUserId(state, viewUserId) {
+      state.viewUserId = viewUserId;
     },
   },
   actions: {},
@@ -30,6 +37,12 @@ export default createStore({
     },
     getToken(state) {
       return state.token;
+    },
+    getUserRole(state) {
+      return state.userRole;
+    },
+    getViewUserId(state) {
+      return state.viewUserId;
     },
   },
 });

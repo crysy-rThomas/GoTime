@@ -12,18 +12,18 @@
           <img id="logo" src="../assets/png/logo-no-background.png">
           <form @submit.prevent="handleSubmit">
             <div id="inputs">
-                <div class="input-group">
-                  <label for="email">Email :</label>
-                  <input type="text" name="email" v-model="email">
-                </div>
-                <div class="input-group">
-                  <label for="password">Password :</label>
-                  <input type="password" name="password" v-model="password">
-                </div>
-                <p>don't have an account yet? you can
-                  <router-link to="/register"><a href="">register here</a></router-link>
-                </p>
-                <input type="submit" value="Submit" name="Submit">
+              <div class="input-group">
+                <label for="email">Email :</label>
+                <input type="text" name="email" v-model="email">
+              </div>
+              <div class="input-group">
+                <label for="password">Password :</label>
+                <input type="password" name="password" v-model="password">
+              </div>
+              <p>don't have an account yet? you can
+                <router-link to="/register"><a href="">register here</a></router-link>
+              </p>
+              <input type="submit" value="Submit" name="Submit">
             </div>
           </form>
         </div>
@@ -35,6 +35,7 @@
 <script>
 import { login } from '@/services/userService';
 import { mapMutations } from "vuex";
+import { getUserById } from '@/services/userService';
 
 export default {
   name: 'ConnexionForm',
@@ -45,13 +46,16 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(["setToken", "setUserId"]),
+    ...mapMutations(["setToken", "setUserId", "setUserRole"]),
     async handleSubmit() {
       try {
         const response = await login(this.email, this.password);
         if (response.data.data.token != null && response.data.data) {
           this.setToken(response.data.data.token);
+          this.setUserId(response.data.data.id);
           console.log(response.data.data.token);
+          const userResponse = await getUserById(response.data.data.id, response.data.data.token);
+          this.setUserRole(userResponse.data.data.role);
           this.$router.push("/home");
         }
       } catch (err) {
