@@ -153,7 +153,6 @@ export default {
 
             return Math.max(0, nighttimeHours); // Ensure that we don't return negative hours
         },
-
         getStartOfTheWeek(date) {
             const result = new Date(date); // This should be the current date when called
             result.setDate(result.getDate() - result.getDay()); // Adjust to the previous Sunday

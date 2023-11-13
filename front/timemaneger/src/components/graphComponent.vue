@@ -63,19 +63,17 @@ export default {
         const now = new Date();
         now.setHours(0, 0, 0, 0); // Remove the time part for a proper date comparison
 
-
         const clocksThisWeek = rawClocks.filter(clock => {
+          console.log(clock);
           const clockDate = new Date(clock.time);
           clockDate.setHours(0, 0, 0, 0); // Normalize clock date for comparison
 
           const now = new Date(); // Current date and time
           const endOfDay = new Date(now); // Create a new date object for the end of the day
           endOfDay.setHours(23, 59, 59, 999); // Set to the last millisecond of the current day
-
           // Check if the clock date is on or after the start of the week and on or before the end of the current day
           return clockDate >= startOfTheWeek && clockDate <= endOfDay;
         });
-
 
         console.log(clocksThisWeek);
         const groupedByDay = this.groupClocksByDay(clocksThisWeek);

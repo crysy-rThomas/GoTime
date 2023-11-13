@@ -50,7 +50,13 @@ defmodule Timemanager.MixProject do
       {:gettext, "~> 0.20"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
-      {:plug_cowboy, "~> 2.5"}
+      {:plug_cowboy, "~> 2.5"},
+      {:ex_doc, "~> 0.21", only: :dev, runtime: false},
+      {:cors_plug, "~> 3.0"},
+      {:comeonin, "~> 5.4"},
+      {:bcrypt_elixir, "~> 3.1"},
+      {:pow, "~> 1.0"},
+      {:joken, "~> 2.2"}
     ]
   end
 
